@@ -10,5 +10,5 @@ export const App = (props) => {
 };
 
 App.propTypes = {
-  places: pt.array.isRequired
+  places: pt.arrayOf(pt.shape({place: pt.string}))
 };
