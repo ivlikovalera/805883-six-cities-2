@@ -1,0 +1,42 @@
+export const offers = [
+  {
+    id: 1,
+    previewImage: `img/apartment-01.jpg`,
+    title: `Nice, cozy, warm big bed apartment`,
+    isFavorite: false,
+    iPremium: false,
+    rating: 4.8,
+    type: `apartment`,
+    price: 120,
+  },
+  {
+    id: 1,
+    previewImage: `img/apartment-02.jpg`,
+    title: `Canal View Prinsengracht`,
+    isFavorite: false,
+    iPremium: true,
+    rating: 5.0,
+    type: `hotel`,
+    price: 180,
+  },
+  {
+    id: 1,
+    previewImage: `img/apartment-03.jpg`,
+    title: `Wood and stone place`,
+    isFavorite: true,
+    iPremium: false,
+    rating: 4.1,
+    type: `room`,
+    price: 140,
+  },
+  {
+    id: 1,
+    previewImage: `img/apartment-04.jpg`,
+    title: `Beautiful & luxurious studio at great location`,
+    isFavorite: false,
+    iPremium: true,
+    rating: 3.8,
+    type: `house`,
+    price: 190,
+  }
+];
