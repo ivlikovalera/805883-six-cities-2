@@ -2,21 +2,27 @@ import React from "react";
 import {PropTypes as pt} from 'prop-types';
 
 export const CardOfPlace = (props) => {
-  const {nameOfPlace, onTitleClick} = props;
-
-  return <article className="cities__place-card place-card">
-    <div className="place-card__mark">
+  const {id,
+    previewImage,
+    title,
+    isPremium,
+    rating,
+    type,
+    price,
+    onCardPoint} = props;
+  return <article className="cities__place-card place-card" id={id} onMouseOver={() => onCardPoint(id)}>
+    {isPremium ? <div className="place-card__mark">
       <span>Premium</span>
-    </div>
+    </div> : null}
     <div className="cities__image-wrapper place-card__image-wrapper">
       <a href="#">
-        <img className="place-card__image" src="img/apartment-01.jpg" width="260" height="200" alt="Place image"/>
+        <img className="place-card__image" src={previewImage} width="260" height="200" alt="Place image"/>
       </a>
     </div>
     <div className="place-card__info">
       <div className="place-card__price-wrapper">
         <div className="place-card__price">
-          <b className="place-card__price-value">&euro;120</b>
+          <b className="place-card__price-value">&euro;{price}</b>
           <span className="place-card__price-text">&#47;&nbsp;night</span>
         </div>
         <button className="place-card__bookmark-button button" type="button">
@@ -29,22 +35,24 @@ export const CardOfPlace = (props) => {
       <div className="place-card__rating rating">
         <div className="place-card__stars rating__stars">
           <span style={{width: `93%`}}></span>
-          <span className="visually-hidden">Rating</span>
+          <span className="visually-hidden">Rating{rating}</span>
         </div>
       </div>
-      <h2 className="place-card__name" onClick={onTitleClick}>
-        <a href="#">{nameOfPlace}</a>
+      <h2 className="place-card__name">
+        <a href="#">{title}</a>
       </h2>
-      <p className="place-card__type">Apartment</p>
+      <p className="place-card__type">{type}</p>
     </div>
   </article>;
 };
 
 CardOfPlace.propTypes = {
-  nameOfPlace: pt.oneOf([
-    `Beautiful & luxurious apartment at great location`,
-    `Canal View Prinsengracht`,
-    `Nice, cozy, warm big bed apartment`,
-    `Wood and stone place`]),
-  onTitleClick: pt.func,
+  id: pt.number.isRequired,
+  onCardPoint: pt.func,
+  previewImage: pt.string.isRequired,
+  title: pt.string.isRequired,
+  isPremium: pt.bool,
+  rating: pt.number.isRequired,
+  type: pt.string.isRequired,
+  price: pt.number.isRequired,
 };
