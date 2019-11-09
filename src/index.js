@@ -8,6 +8,7 @@ const init = () => {
   ReactDOM.render(
       <App
         places={offers}
+        pins={offers}
       />,
       document.querySelector(`#root`)
   );
