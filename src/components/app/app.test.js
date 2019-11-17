@@ -6,8 +6,10 @@ jest.mock(`../map/map.jsx`);
 it(`App correctly renders after relaunch`, () => {
   const appComponent = renderer
   .create(<App
-    places={[]}
-    pins={[]}
+    names={[]}
+    activeCity={{}}
+    chooseCityHandler={() => {}}
+    listOffer={[]}
   />)
   .toJSON();
 
