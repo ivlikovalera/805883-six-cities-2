@@ -2,17 +2,26 @@ import React from 'react';
 import L from 'leaflet';
 import {PropTypes as pt} from 'prop-types';
 
-const AMSTERDAM = [52.38333, 4.9];
 const icon = L.icon({
   iconUrl: `img/pin.svg`,
   iconSize: [30, 30]
 });
 
 export default class Map extends React.PureComponent {
+
+  _addPins(pins) {
+    this.markers = [];
+    pins.forEach((pin)=> {
+      const latitude = pin.location.latitude;
+      const longitude = pin.location.longitude;
+      const coordinates = [latitude, longitude];
+      this.markers.push(L.marker(coordinates, {icon}).addTo(this.map));
+    });
+  }
   componentDidMount() {
-    const {pins} = this.props;
+    const {pins, activeCity} = this.props;
     this.map = L.map(`map`, {
-      center: AMSTERDAM,
+      center: [activeCity.location.latitude, activeCity.location.longitude],
       zoom: 10,
       layers: [
         L.tileLayer(`https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png`, {
@@ -22,13 +31,18 @@ export default class Map extends React.PureComponent {
         })
       ]
     });
-    pins.forEach((pin)=> {
-      const latitude = pin.location.latitude;
-      const longitude = pin.location.longitude;
-      const coordinates = [latitude, longitude];
-      L.marker(coordinates, {icon}).addTo(this.map);
+
+    this._addPins(pins);
+  }
+
+  componentDidUpdate() {
+    const {activeCity, pins} = this.props;
+    this.map.setView([activeCity.location.latitude, activeCity.location.longitude], 10);
+    this.markers.forEach((marker) => {
+      this.map.removeLayer(marker);
     });
 
+    this._addPins(pins);
   }
 
   render() {
@@ -39,5 +53,11 @@ export default class Map extends React.PureComponent {
 Map.propTypes = {
   latitude: pt.number,
   longitude: pt.number,
-  pins: pt.array
+  pins: pt.array,
+  activeCity: pt.shape({
+    location: pt.shape({
+      latitude: pt.number,
+      longitude: pt.number,
+    })
+  })
 };
