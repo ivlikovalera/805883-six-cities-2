@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import ListOfCards from './list-of-cards.jsx';
+import {ListOfCards} from './list-of-cards.jsx';
 
 it(`List correctly renders after relaunch`, () => {
 
