@@ -1,24 +1,30 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {reducer} from './reducer.js';
-import {createStore} from 'redux';
+import thunk from 'redux-thunk';
+import {reducer, Operation} from './reducer/reducer.js';
+import {createStore, applyMiddleware} from 'redux';
+import {createAPI} from './api.js';
 import {Provider} from 'react-redux';
+import {compose} from 'recompose';
 import App from './components/app/app.jsx';
-import {offers} from './mocks/offers.js';
-import {namesOfUniqueCities} from './utils.js';
 
 const init = () => {
+  const api = createAPI((...args) => store.dispatch(Operation.loadOffers(...args)));
   const store = createStore(
       reducer,
-      window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : (f) => f
+      compose(
+          applyMiddleware(thunk.withExtraArgument(api)),
+          window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : (f) => f
+      )
   );
+
+  store.dispatch(Operation.loadOffers());
+
   ReactDOM.render(<Provider store={store}>
-    <App
-      names={namesOfUniqueCities}
-    />
+    <App/>
   </Provider>,
   document.querySelector(`#root`)
   );
 };
 
-init(offers);
+init();

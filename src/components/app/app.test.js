@@ -6,7 +6,7 @@ jest.mock(`../map/map.jsx`);
 it(`App correctly renders after relaunch`, () => {
   const appComponent = renderer
   .create(<App
-    names={[]}
+    uniqueCities={[]}
     activeCity={{}}
     chooseCityHandler={() => {}}
     listOffer={[]}

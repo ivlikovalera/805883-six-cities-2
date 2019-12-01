@@ -3,10 +3,10 @@ import {City} from './../city/city.jsx';
 import {PropTypes as pt} from 'prop-types';
 
 export const ListOfCities = (props) => {
-  const {names, activeCity, chooseCityHandler} = props;
+  const {uniqueCities, activeCity, chooseCityHandler} = props;
   return <section className="locations container">
     <ul className="locations__list tabs__list">
-      {names.map((it, i) => <City
+      {uniqueCities.map((it, i) => <City
         activeCity={activeCity}
         key={i}
         name={it.name}
@@ -16,9 +16,8 @@ export const ListOfCities = (props) => {
   </section>;
 };
 
-
 ListOfCities.propTypes = {
-  names: pt.array,
+  uniqueCities: pt.array,
   chooseCityHandler: pt.func,
   activeCity: pt.object,
 };

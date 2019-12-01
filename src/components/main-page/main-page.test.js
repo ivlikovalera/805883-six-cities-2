@@ -9,7 +9,7 @@ it(`Main page correctly renders after relaunch`, () => {
   .create(<MainPage
     places={[]}
     pins={[]}
-    names={[]}
+    uniqueCities={[]}
     activeCity={{}}
     chooseCityHandler={() => {}}
   />)
