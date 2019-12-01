@@ -6,7 +6,7 @@ it(`List correctly renders after relaunch`, () => {
 
   const listComponent = renderer
   .create(<ListOfCities
-    names={[]}
+    uniqueCities={[]}
     activeCity={{}}
     chooseCityHandler={() => {}}
   />)

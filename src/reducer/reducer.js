@@ -41,9 +41,11 @@ export const reducer = (state = initialState, action) => {
         listOffer: state.offers.filter((offer) => offer.city.name === state.activeCity.name)
       });
     case ActionType.LOAD_OFFERS:
+      const cities = getUniqueCities(action.payload);
       return Object.assign({}, state, {
         offers: action.payload.map((offer) => adapter(offer)),
-        uniqueCities: getUniqueCities(action.payload),
+        uniqueCities: cities,
+        activeCity: cities[Math.floor(Math.random() * 5)],
       });
   }
   return state;
@@ -55,7 +57,6 @@ export const Operation = {
       .then((response) => {
         const loadedOffers = response.data;
         dispatch(ActionCreator.loadOffers(loadedOffers));
-        dispatch(ActionCreator.changeCity(loadedOffers[Math.floor(Math.random() * 5)].city.name));
         dispatch(ActionCreator.getOffers());
       });
   }
