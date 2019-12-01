@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {ActionCreator} from './../../reducer.js';
+import {ActionCreator} from '../../reducer/reducer.js';
 import {PropTypes as pt} from 'prop-types';
 import {MainPage} from './../main-page/main-page.jsx';
 

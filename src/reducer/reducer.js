@@ -1,5 +1,5 @@
-import {getUniqueCities} from './utils.js';
-import {adapter} from './adapter/adapter.js';
+import {getUniqueCities} from './../utils.js';
+import {adapter} from './../adapter/adapter.js';
 
 const initialState = {
   activeCity: {},

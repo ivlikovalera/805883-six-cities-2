@@ -1,5 +1,5 @@
 import {offers} from './mocks/offers.js';
-import {namesOfUniqueCities} from './utils.js';
+import {namesOfUniqueCities} from '../utils.js';
 import {reducer} from './reducer.js';
 
 describe(`reducer`, () => {

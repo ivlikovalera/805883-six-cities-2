@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import thunk from 'redux-thunk';
-import {reducer, Operation} from './reducer.js';
+import {reducer, Operation} from './reducer/reducer.js';
 import {createStore, applyMiddleware} from 'redux';
 import {createAPI} from './api.js';
 import {Provider} from 'react-redux';
