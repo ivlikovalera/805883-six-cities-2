@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {connect} from 'react-redux';
 import {ActionCreator} from './../../reducer.js';
 import {PropTypes as pt} from 'prop-types';
@@ -6,15 +6,16 @@ import {MainPage} from './../main-page/main-page.jsx';
 
 export const App = (props) => {
   const {
-    names,
     activeCity,
     chooseCityHandler,
     listOffer,
+    uniqueCities,
   } = props;
+
   return <MainPage
     places={listOffer}
     pins={listOffer}
-    names={names}
+    uniqueCities={uniqueCities}
     activeCity={activeCity}
     chooseCityHandler={chooseCityHandler}
   />;
@@ -28,7 +29,7 @@ App.propTypes = {
       longtitude: pt.number,
     })
   })),
-  names: pt.array,
+  uniqueCities: pt.array,
   chooseCityHandler: pt.func,
   listOffer: pt.array,
   activeCity: pt.object,
@@ -37,6 +38,7 @@ App.propTypes = {
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
   activeCity: state.activeCity,
   listOffer: state.listOffer,
+  uniqueCities: state.uniqueCities,
 });
 
 const mapDispatchToProps = (dispatch) => ({

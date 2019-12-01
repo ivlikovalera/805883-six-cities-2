@@ -11,7 +11,7 @@ export const MainPage = (props) => {
   const {
     places,
     pins,
-    names,
+    uniqueCities,
     activeCity,
     chooseCityHandler,
   } = props;
@@ -48,7 +48,7 @@ export const MainPage = (props) => {
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <ListOfCities
-            names={names}
+            uniqueCities={uniqueCities}
             activeCity={activeCity}
             chooseCityHandler={chooseCityHandler}
           />
@@ -96,7 +96,7 @@ export const MainPage = (props) => {
 MainPage.propTypes = {
   places: pt.array,
   pins: pt.array,
-  names: pt.array,
+  uniqueCities: pt.array,
   chooseCityHandler: pt.func,
   activeCity: pt.object,
   city: pt.shape({
