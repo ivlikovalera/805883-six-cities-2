@@ -43,7 +43,7 @@ Array [
     </svg>
   </div>,
   <div
-    className="page page--gray page--main"
+    className="page page--gray page--login"
   >
     <header
       className="header"
@@ -88,7 +88,7 @@ Array [
                   <span
                     className="header__user-name user__name"
                   >
-                    Oliver.conner@gmail.com
+                    
                   </span>
                 </a>
               </li>
@@ -98,110 +98,85 @@ Array [
       </div>
     </header>
     <main
-      className="page__main page__main--index"
+      className="page__main page__main--login"
     >
-      <h1
-        className="visually-hidden"
-      >
-        Cities
-      </h1>
       <div
-        className="tabs"
+        className="page__login-container container"
       >
         <section
-          className="locations container"
+          className="login"
         >
-          <ul
-            className="locations__list tabs__list"
-          />
-        </section>
-      </div>
-      <div
-        className="cities"
-      >
-        <div
-          className="cities__places-container container"
-        >
-          <section
-            className="cities__places places"
+          <h1
+            className="login__title"
           >
-            <h2
-              className="visually-hidden"
-            >
-              Places
-            </h2>
-            <b
-              className="places__found"
-            >
-              0
-               places to stay in 
-            </b>
-            <form
-              action="#"
-              className="places__sorting"
-              method="get"
-            >
-              <span
-                className="places__sorting-caption"
-              >
-                Sort by
-              </span>
-              <span
-                className="places__sorting-type"
-                tabIndex="0"
-              >
-                Popular
-                <svg
-                  className="places__sorting-arrow"
-                  height="4"
-                  width="7"
-                >
-                  <use
-                    xlinkHref="#icon-arrow-select"
-                  />
-                </svg>
-              </span>
-              <ul
-                className="places__options places__options--custom places__options--opened"
-              >
-                <li
-                  className="places__option places__option--active"
-                  tabIndex="0"
-                >
-                  Popular
-                </li>
-                <li
-                  className="places__option"
-                  tabIndex="0"
-                >
-                  Price: low to high
-                </li>
-                <li
-                  className="places__option"
-                  tabIndex="0"
-                >
-                  Price: high to low
-                </li>
-                <li
-                  className="places__option"
-                  tabIndex="0"
-                >
-                  Top rated first
-                </li>
-              </ul>
-            </form>
+            Sign in
+          </h1>
+          <form
+            action="#"
+            className="login__form form"
+            method="post"
+          >
             <div
-              className="cities__places-list places__list tabs__content"
-            />
-          </section>
+              className="login__input-wrapper form__input-wrapper"
+            >
+              <label
+                className="visually-hidden"
+              >
+                E-mail
+              </label>
+              <input
+                className="login__input form__input"
+                name="email"
+                onChange={[Function]}
+                placeholder="Email"
+                required=""
+                type="email"
+                value=""
+              />
+            </div>
+            <div
+              className="login__input-wrapper form__input-wrapper"
+            >
+              <label
+                className="visually-hidden"
+              >
+                Password
+              </label>
+              <input
+                className="login__input form__input"
+                name="password"
+                onChange={[Function]}
+                placeholder="Password"
+                required=""
+                type="password"
+                value=""
+              />
+            </div>
+            <button
+              className="login__submit form__submit button"
+              onClick={[Function]}
+              type="submit"
+            >
+              Sign in
+            </button>
+          </form>
+        </section>
+        <section
+          className="locations locations--login locations--current"
+        >
           <div
-            className="cities__right-section"
+            className="locations__item"
           >
-            <section
-              className="cities__map map"
-            />
+            <a
+              className="locations__item-link"
+              href="#"
+            >
+              <span>
+                Amsterdam
+              </span>
+            </a>
           </div>
-        </div>
+        </section>
       </div>
     </main>
   </div>,

@@ -87,9 +87,7 @@ Array [
                   />
                   <span
                     className="header__user-name user__name"
-                  >
-                    Oliver.conner@gmail.com
-                  </span>
+                  />
                 </a>
               </li>
             </ul>

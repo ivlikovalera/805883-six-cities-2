@@ -9,9 +9,12 @@ export const createAPI = (dispatch) => {
 
   const onSuccess = (response) => response;
 
-  const onFail = () => {
-    dispatch();
-    return;
+  const onFail = (err) => {
+    if (err.status === 401) {
+      dispatch();
+      return;
+    }
+    throw err;
   };
 
   api.interceptors.response.use(onSuccess, onFail);

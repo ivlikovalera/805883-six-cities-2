@@ -12,6 +12,9 @@ it(`Main page correctly renders after relaunch`, () => {
     uniqueCities={[]}
     activeCity={{}}
     chooseCityHandler={() => {}}
+    isAuthorizationRequired={true || false}
+    auth={() => {}}
+    login={``}
   />)
   .toJSON();
 
