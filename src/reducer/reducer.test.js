@@ -1,4 +1,4 @@
-import {Operation, reducer} from './reducer.js';
+import {Operation, reducer, ActionType} from './reducer.js';
 import MockAdapter from "axios-mock-adapter";
 import {createAPI} from "./../api.js";
 
@@ -10,6 +10,9 @@ describe(`reducer`, () => {
           listOffer: [],
           uniqueCities: [],
           offers: [],
+          isAuthorizationRequired: true,
+          userData: {},
+          login: `Sign in`,
         }
     );
   });
@@ -28,11 +31,11 @@ describe(`reducer`, () => {
       .then(() => {
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch).toHaveBeenNthCalledWith(1, {
-          type: `LOAD_OFFERS`,
+          type: ActionType.LOAD_OFFERS,
           payload: [{fake: true}],
         });
         expect(dispatch).toHaveBeenNthCalledWith(2, {
-          type: `GET_LIST_OF_OFFERS`,
+          type: ActionType.GET_LIST_OF_OFFERS,
         });
       });
   });
@@ -66,7 +69,7 @@ describe(`reducer`, () => {
           ]
         },
         {
-          type: `CHANGE_CITY`,
+          type: ActionType.CHANGE_CITY,
           payload: `Hamburg`,
         })
     ).toEqual(
@@ -138,7 +141,7 @@ describe(`reducer`, () => {
           ]
         },
         {
-          type: `GET_LIST_OF_OFFERS`,
+          type: ActionType.GET_LIST_OF_OFFERS,
         })
     ).toEqual(
         {
