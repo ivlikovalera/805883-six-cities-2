@@ -1,18 +1,21 @@
 import {getUniqueCities} from './../utils.js';
-import {adapter} from './../adapter/adapter.js';
+import {adapterOffers, adapterUserData} from './../adapter/adapter.js';
 
 const initialState = {
   activeCity: {},
   listOffer: [],
   uniqueCities: [],
   offers: [],
-  isAuthorizationRequired: false,
+  isAuthorizationRequired: true,
+  userData: {},
+  login: `Sign in`,
 };
 
-const ActionType = {
+export const ActionType = {
   CHANGE_CITY: `CHANGE_CITY`,
   GET_LIST_OF_OFFERS: `GET_LIST_OF_OFFERS`,
   LOAD_OFFERS: `LOAD_OFFERS`,
+  AUTHORIZATION_REQUIRED: `AUTHORIZATION_REQUIRED`,
   AUTHORIZATION: `AUTHORIZATION`,
 };
 
@@ -31,8 +34,14 @@ export const ActionCreator = {
     payload: offers,
   }),
 
-  authorization: () => ({
+  authorizationRequired: (status) => ({
+    type: ActionType.AUTHORIZATION_REQUIRED,
+    payload: status,
+  }),
+
+  authorization: (userData) => ({
     type: ActionType.AUTHORIZATION,
+    payload: userData,
   })
 };
 
@@ -49,13 +58,18 @@ export const reducer = (state = initialState, action) => {
     case ActionType.LOAD_OFFERS:
       const cities = getUniqueCities(action.payload);
       return Object.assign({}, state, {
-        offers: action.payload.map((offer) => adapter(offer)),
+        offers: action.payload.map((offer) => adapterOffers(offer)),
         uniqueCities: cities,
         activeCity: cities[Math.floor(Math.random() * 5)],
       });
+    case ActionType.AUTHORIZATION_REQUIRED:
+      return Object.assign({}, state, {
+        isAuthorizationRequired: action.payload,
+      });
     case ActionType.AUTHORIZATION:
       return Object.assign({}, state, {
-        isAuthorizationRequired: !state.isAuthorizationRequired,
+        login: adapterUserData(action.payload).email,
+        userData: adapterUserData(action.payload),
       });
   }
   return state;
@@ -68,6 +82,23 @@ export const Operation = {
         const loadedOffers = response.data;
         dispatch(ActionCreator.loadOffers(loadedOffers));
         dispatch(ActionCreator.getOffers());
+      });
+  },
+  authorizationStatus: () => (dispatch, _getState, api) => {
+    return api.get(`/login`)
+      .then((response) => {
+        if (response.status === 200) {
+          dispatch(ActionCreator.authorizationRequired(false));
+        }
+      });
+  },
+  authorization: (credentials) => (dispatch, _getState, api) => {
+    return api.post(`/login`, credentials)
+      .then((response) => {
+        if (response.status === 200) {
+          dispatch(ActionCreator.authorization(response.data));
+          dispatch(ActionCreator.authorizationRequired(false));
+        }
       });
   }
 };

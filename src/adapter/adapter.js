@@ -1,4 +1,4 @@
-export const adapter = (offer) => {
+export const adapterOffers = (offer) => {
   return {
     id: offer.id,
     city: {
@@ -35,3 +35,12 @@ export const adapter = (offer) => {
   };
 };
 
+export const adapterUserData = (userData) => {
+  return {
+    id: userData.id,
+    email: userData.email,
+    name: userData.name,
+    avatarUrl: userData.avatar_url,
+    isPro: userData.is_pro,
+  };
+};

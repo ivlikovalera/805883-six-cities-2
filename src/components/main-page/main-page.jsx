@@ -16,6 +16,8 @@ export const MainPage = (props) => {
     activeCity,
     chooseCityHandler,
     isAuthorizationRequired,
+    auth,
+    login,
   } = props;
   return <>
     <div style={{display: `none`}}>
@@ -37,7 +39,7 @@ export const MainPage = (props) => {
                   <a className="header__nav-link header__nav-link--profile" href="#">
                     <div className="header__avatar-wrapper user__avatar-wrapper">
                     </div>
-                    <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
+                    <span className="header__user-name user__name">{login}</span>
                   </a>
                 </li>
               </ul>
@@ -47,7 +49,9 @@ export const MainPage = (props) => {
       </header>
 
       <main className={isAuthorizationRequired ? `page__main page__main--login` : `page__main page__main--index`}>
-        {isAuthorizationRequired ? <SignIn/> : <>
+        {isAuthorizationRequired ? <SignIn
+          auth={auth}
+        /> : <>
       <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <ListOfCities
@@ -102,8 +106,10 @@ MainPage.propTypes = {
   pins: pt.array,
   uniqueCities: pt.array,
   chooseCityHandler: pt.func,
+  auth: pt.func,
   activeCity: pt.object,
   isAuthorizationRequired: pt.bool,
+  login: pt.string,
   city: pt.shape({
     location: pt.shape({
       latitude: pt.number,

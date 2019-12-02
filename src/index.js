@@ -9,7 +9,7 @@ import {compose} from 'recompose';
 import App from './components/app/app.jsx';
 
 const init = () => {
-  const api = createAPI((...args) => store.dispatch(Operation.loadOffers(...args)));
+  const api = createAPI((...args) => store.dispatch(...args));
   const store = createStore(
       reducer,
       compose(
