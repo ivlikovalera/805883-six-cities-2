@@ -10,6 +10,7 @@ export const App = (props) => {
     chooseCityHandler,
     listOffer,
     uniqueCities,
+    isAuthorizationRequired,
   } = props;
 
   return <MainPage
@@ -18,6 +19,7 @@ export const App = (props) => {
     uniqueCities={uniqueCities}
     activeCity={activeCity}
     chooseCityHandler={chooseCityHandler}
+    isAuthorizationRequired={isAuthorizationRequired}
   />;
 };
 
@@ -33,12 +35,14 @@ App.propTypes = {
   chooseCityHandler: pt.func,
   listOffer: pt.array,
   activeCity: pt.object,
+  isAuthorizationRequired: pt.bool,
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
   activeCity: state.activeCity,
   listOffer: state.listOffer,
   uniqueCities: state.uniqueCities,
+  isAuthorizationRequired: state.isAuthorizationRequired,
 });
 
 const mapDispatchToProps = (dispatch) => ({

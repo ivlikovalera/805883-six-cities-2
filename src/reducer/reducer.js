@@ -6,12 +6,14 @@ const initialState = {
   listOffer: [],
   uniqueCities: [],
   offers: [],
+  isAuthorizationRequired: false,
 };
 
 const ActionType = {
   CHANGE_CITY: `CHANGE_CITY`,
   GET_LIST_OF_OFFERS: `GET_LIST_OF_OFFERS`,
   LOAD_OFFERS: `LOAD_OFFERS`,
+  AUTHORIZATION: `AUTHORIZATION`,
 };
 
 export const ActionCreator = {
@@ -28,6 +30,10 @@ export const ActionCreator = {
     type: ActionType.LOAD_OFFERS,
     payload: offers,
   }),
+
+  authorization: () => ({
+    type: ActionType.AUTHORIZATION,
+  })
 };
 
 export const reducer = (state = initialState, action) => {
@@ -46,6 +52,10 @@ export const reducer = (state = initialState, action) => {
         offers: action.payload.map((offer) => adapter(offer)),
         uniqueCities: cities,
         activeCity: cities[Math.floor(Math.random() * 5)],
+      });
+    case ActionType.AUTHORIZATION:
+      return Object.assign({}, state, {
+        isAuthorizationRequired: !state.isAuthorizationRequired,
       });
   }
   return state;
