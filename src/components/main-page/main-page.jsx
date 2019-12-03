@@ -2,7 +2,6 @@ import React from 'react';
 import {PropTypes as pt} from 'prop-types';
 import {ListOfCards} from '../list-of-cards/list-of-cards.jsx';
 import {ListOfCities} from '../list-of-cities/list-of-cities.jsx';
-import {SignIn} from './../sign-in/sign-in.jsx';
 import withActiveItem from './../../hocs/with-active-item/with-active-item.js';
 import Map from './../map/map.jsx';
 
@@ -16,7 +15,6 @@ export const MainPage = (props) => {
     activeCity,
     chooseCityHandler,
     isAuthorizationRequired,
-    auth,
     login,
   } = props;
   return <>
@@ -49,10 +47,7 @@ export const MainPage = (props) => {
       </header>
 
       <main className={isAuthorizationRequired ? `page__main page__main--login` : `page__main page__main--index`}>
-        {isAuthorizationRequired ? <SignIn
-          auth={auth}
-        /> : <>
-      <h1 className="visually-hidden">Cities</h1>
+        <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <ListOfCities
             uniqueCities={uniqueCities}
@@ -95,7 +90,6 @@ export const MainPage = (props) => {
             </div>
           </div>
         </div>
-        </>}
       </main>
     </div>
   </>;
@@ -106,7 +100,6 @@ MainPage.propTypes = {
   pins: pt.array,
   uniqueCities: pt.array,
   chooseCityHandler: pt.func,
-  auth: pt.func,
   activeCity: pt.object,
   isAuthorizationRequired: pt.bool,
   login: pt.string,

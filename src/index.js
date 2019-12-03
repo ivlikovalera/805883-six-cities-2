@@ -5,6 +5,7 @@ import {reducer, Operation} from './reducer/reducer.js';
 import {createStore, applyMiddleware} from 'redux';
 import {createAPI} from './api.js';
 import {Provider} from 'react-redux';
+import {BrowserRouter} from 'react-router-dom';
 import {compose} from 'recompose';
 import App from './components/app/app.jsx';
 
@@ -21,7 +22,9 @@ const init = () => {
   store.dispatch(Operation.loadOffers());
 
   ReactDOM.render(<Provider store={store}>
-    <App/>
+    <BrowserRouter>
+      <App/>
+    </BrowserRouter>
   </Provider>,
   document.querySelector(`#root`)
   );
