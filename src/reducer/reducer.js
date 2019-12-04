@@ -6,7 +6,7 @@ const initialState = {
   listOffer: [],
   uniqueCities: [],
   offers: [],
-  isAuthorizationRequired: false,
+  isAuthorizationRequired: true,
   userData: {},
   login: `Sign in`,
 };

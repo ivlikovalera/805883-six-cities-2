@@ -31,9 +31,11 @@ export const App = (props) => {
           login={login}
         />}
       />
-      <Route path="/login" exact rendeer={() =>
+      <Route path="/login" exact render={() =>
         <SignIn
           auth={auth}
+          login={login}
+          isAuthorizationRequired={isAuthorizationRequired}
         />}/>
     </Switch>
   );
