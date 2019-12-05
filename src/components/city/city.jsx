@@ -4,7 +4,8 @@ import {PropTypes as pt} from 'prop-types';
 export const City = (props) => {
   const {name, onCityClick, activeCity} = props;
   return <li className="locations__item">
-    <a className={(activeCity.name === name) ? `locations__item-link tabs__item tabs__item--active` : `locations__item-link tabs__item`} href="#" onClick={(evt) => {
+    <a className={(activeCity.name === name) ? `locations__item-link tabs__item tabs__item--active`
+      : `locations__item-link tabs__item`} href="#" onClick={(evt) => {
       evt.preventDefault();
       onCityClick(name);
     }}>

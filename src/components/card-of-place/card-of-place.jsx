@@ -6,11 +6,13 @@ export const CardOfPlace = (props) => {
     previewImage,
     title,
     isPremium,
+    isFavorite,
     rating,
     type,
     price,
-    onCardPoint} = props;
-  return <article className="cities__place-card place-card" id={id} onMouseOver={() => onCardPoint(id)}>
+    onFavoriteClick} = props;
+
+  return <article className="cities__place-card place-card" id={id}>
     {isPremium ? <div className="place-card__mark">
       <span>Premium</span>
     </div> : null}
@@ -25,7 +27,11 @@ export const CardOfPlace = (props) => {
           <b className="place-card__price-value">&euro;{price}</b>
           <span className="place-card__price-text">&#47;&nbsp;night</span>
         </div>
-        <button className="place-card__bookmark-button button" type="button">
+        <button className={isFavorite ? `place-card__bookmark-button place-card__bookmark-button--active button`
+          : `place-card__bookmark-button button`} type="button" onClick={(evt) => {
+          evt.preventDefault();
+          onFavoriteClick(id);
+        }}>
           <svg className="place-card__bookmark-icon" width="18" height="19">
             <use xlinkHref="#icon-bookmark"></use>
           </svg>
@@ -49,9 +55,11 @@ export const CardOfPlace = (props) => {
 CardOfPlace.propTypes = {
   id: pt.number.isRequired,
   onCardPoint: pt.func,
+  onFavoriteClick: pt.func,
   previewImage: pt.string.isRequired,
   title: pt.string.isRequired,
   isPremium: pt.bool,
+  isFavorite: pt.bool,
   rating: pt.number.isRequired,
   type: pt.string.isRequired,
   price: pt.number.isRequired,

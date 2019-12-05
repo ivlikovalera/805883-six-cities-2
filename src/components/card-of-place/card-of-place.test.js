@@ -10,10 +10,12 @@ it(`Card correctly renders after relaunch`, () => {
     previewImage={``}
     title={``}
     isPremium={true || false}
+    isFavorite={true || false}
     rating={0}
     type={``}
     price={0}
     onCardPoint={() => {}}
+    onFavoriteClick={() => {}}
   />)
   .toJSON();
 

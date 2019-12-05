@@ -80,14 +80,17 @@ Array [
               >
                 <a
                   className="header__nav-link header__nav-link--profile"
-                  href="#"
+                  href="/login"
+                  onClick={[Function]}
                 >
                   <div
                     className="header__avatar-wrapper user__avatar-wrapper"
                   />
                   <span
                     className="header__user-name user__name"
-                  />
+                  >
+                    
+                  </span>
                 </a>
               </li>
             </ul>

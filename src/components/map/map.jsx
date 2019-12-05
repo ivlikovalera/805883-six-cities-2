@@ -18,9 +18,9 @@ export default class Map extends React.PureComponent {
     });
   }
   componentDidMount() {
-    const {pins} = this.props;
+    const {pins, activeCity} = this.props;
     this.map = L.map(`map`, {
-      center: [0, 0],
+      center: Object.keys(activeCity).length ? [activeCity.location.latitude, activeCity.location.longitude] : [0, 0],
       zoom: 10,
       layers: [
         L.tileLayer(`https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png`, {
