@@ -3,10 +3,7 @@ import {PropTypes as pt} from 'prop-types';
 import {ListOfCards} from '../list-of-cards/list-of-cards.jsx';
 import {ListOfCities} from '../list-of-cities/list-of-cities.jsx';
 import {Header} from './../header/header.jsx';
-import withActiveItem from './../../hocs/with-active-item/with-active-item.js';
 import Map from './../map/map.jsx';
-
-const ListOfCardsWrapped = withActiveItem(ListOfCards);
 
 export const MainPage = (props) => {
   const {
@@ -16,6 +13,7 @@ export const MainPage = (props) => {
     activeCity,
     chooseCityHandler,
     login,
+    favoriteClickHandler,
   } = props;
   return <>
     <div style={{display: `none`}}>
@@ -55,8 +53,9 @@ export const MainPage = (props) => {
                   <li className="places__option" tabIndex="0">Top rated first</li>
                 </ul>
               </form>
-              <ListOfCardsWrapped
+              <ListOfCards
                 places={places}
+                favoriteClickHandler={favoriteClickHandler}
               />
             </section>
             <div className="cities__right-section">
@@ -80,6 +79,7 @@ MainPage.propTypes = {
   pins: pt.array,
   uniqueCities: pt.array,
   chooseCityHandler: pt.func,
+  favoriteClickHandler: pt.func,
   activeCity: pt.object,
   login: pt.string,
   city: pt.shape({

@@ -11,6 +11,7 @@ export const App = (props) => {
   const {
     activeCity,
     chooseCityHandler,
+    favoriteClickHandler,
     listOffer,
     uniqueCities,
     isAuthorizationRequired,
@@ -27,6 +28,7 @@ export const App = (props) => {
           uniqueCities={uniqueCities}
           activeCity={activeCity}
           chooseCityHandler={chooseCityHandler}
+          favoriteClickHandler={favoriteClickHandler}
           isAuthorizationRequired={isAuthorizationRequired}
           login={login}
         />}
@@ -51,6 +53,7 @@ App.propTypes = {
   })),
   uniqueCities: pt.array,
   chooseCityHandler: pt.func,
+  favoriteClickHandler: pt.func,
   listOffer: pt.array,
   activeCity: pt.object,
   isAuthorizationRequired: pt.bool,
@@ -69,6 +72,10 @@ const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
 const mapDispatchToProps = (dispatch) => ({
   chooseCityHandler: (city) => {
     dispatch(ActionCreator.changeCity(city));
+    dispatch(ActionCreator.getOffers());
+  },
+  favoriteClickHandler: (id) => {
+    dispatch(ActionCreator.changeFavorite(id));
     dispatch(ActionCreator.getOffers());
   },
   auth: (authData) => {

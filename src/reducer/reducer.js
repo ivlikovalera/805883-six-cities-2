@@ -17,6 +17,7 @@ export const ActionType = {
   LOAD_OFFERS: `LOAD_OFFERS`,
   AUTHORIZATION_REQUIRED: `AUTHORIZATION_REQUIRED`,
   AUTHORIZATION: `AUTHORIZATION`,
+  CHANGE_FAVORITE: `CHANGE_FAVORITE`
 };
 
 export const ActionCreator = {
@@ -42,6 +43,11 @@ export const ActionCreator = {
   authorization: (userData) => ({
     type: ActionType.AUTHORIZATION,
     payload: userData,
+  }),
+
+  changeFavorite: (id) => ({
+    type: ActionType.CHANGE_FAVORITE,
+    payload: id,
   })
 };
 
@@ -71,6 +77,9 @@ export const reducer = (state = initialState, action) => {
         login: adapterUserData(action.payload).email,
         userData: adapterUserData(action.payload),
       });
+    case ActionType.CHANGE_FAVORITE:
+      state.offers[state.offers.findIndex((offer) => offer.id === action.payload)].isFavorite = !state.offers[state.offers.findIndex((offer) => offer.id === action.payload)].isFavorite;
+      return Object.assign({}, state);
   }
   return state;
 };
