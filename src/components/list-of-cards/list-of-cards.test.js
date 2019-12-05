@@ -7,6 +7,8 @@ it(`List correctly renders after relaunch`, () => {
   const listComponent = renderer
   .create(<ListOfCards
     places={[]}
+    cardPointHandler={() => {}}
+    favoriteClickHandler={() => {}}
   />)
   .toJSON();
 
