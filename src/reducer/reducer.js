@@ -1,4 +1,4 @@
-import {getUniqueCities} from './../utils.js';
+import {getUniqueCities, selectFilter} from './../utils.js';
 import {adapterOffers, adapterUserData, adapterReviewData} from './../adapter/adapter.js';
 
 const initialState = {
@@ -22,6 +22,7 @@ export const ActionType = {
   CHANGE_FAVORITE: `CHANGE_FAVORITE`,
   GET_REVIEWS: `GET_REVIEWS`,
   CHANGE_FETCHING: `CHANGE_FETCHING`,
+  SORT_OFFERS: `SORT_OFFERS`,
 };
 
 export const ActionCreator = {
@@ -68,6 +69,10 @@ export const ActionCreator = {
     type: ActionType.CHANGE_FETCHING,
     payload: status,
   }),
+  sortOffers: (filter) => ({
+    type: ActionType.SORT_OFFERS,
+    payload: filter,
+  })
 };
 
 export const reducer = (state = initialState, action) => {
@@ -101,17 +106,26 @@ export const reducer = (state = initialState, action) => {
     case ActionType.CHANGE_FAVORITE:
       const offerIndex = findOfferIndexById(action.payload);
       state.offers[offerIndex].isFavorite = !state.offers[offerIndex].isFavorite;
-      return Object.assign({}, state);
+      return Object.assign({}, state, {
+        offers: state.offers.slice()
+      });
 
     case ActionType.GET_REVIEWS:
       const reviews = action.payload.reviews.map((it) => adapterReviewData(it));
       return Object.assign({}, state, {
-        reviews,
+        reviews: reviews.slice(),
       });
     case ActionType.CHANGE_FETCHING:
       return Object.assign({}, state, {
         isFetching: action.payload,
       });
+    case ActionType.SORT_OFFERS: {
+      const filterOffers = state.listOffer;
+      filterOffers.sort(selectFilter(action.payload));
+      return Object.assign({}, state, {
+        listOffer: filterOffers.slice(),
+      });
+    }
   }
   return state;
 };

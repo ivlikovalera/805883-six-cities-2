@@ -1,3 +1,10 @@
+export const FilterType = {
+  POPULAR: `Popular`,
+  PRICE: `Price: low to high`,
+  PRICEDESC: `Price: high to low`,
+  RATED: `Top rated first`
+};
+
 export const getUniqueCities = (offers) => {
   const namesOfUniqueCities = [];
   offers.forEach((offer) => {
@@ -27,4 +34,16 @@ export const getDistance = (lat1, lon1, lat2, lon2) => {
     dist = dist * 1.609344;
     return dist;
   }
+};
+
+export const selectFilter = (type) => {
+  switch (type) {
+    case FilterType.PRICE:
+      return (a, b) => a.price - b.price;
+    case FilterType.PRICEDESC:
+      return (a, b) => b.price - a.price;
+    case FilterType.RATED:
+      return (a, b) => a.rating - b.rating;
+  }
+  return (a, b) => a.id - b.id;
 };

@@ -26,6 +26,7 @@ export const App = (props) => {
     isFetching,
     changeFetching,
     loadOffers,
+    sortOffers,
   } = props;
 
   return (
@@ -49,6 +50,7 @@ export const App = (props) => {
           login={login}
           getReviews={getReviews}
           isCities={true}
+          sortOffers={sortOffers}
         />;
       }
       }/>
@@ -104,6 +106,7 @@ App.propTypes = {
   isFetching: pt.bool,
   changeFetching: pt.func,
   loadOffers: pt.func,
+  sortOffers: pt.func,
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
@@ -140,6 +143,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   loadOffers: () => {
     dispatch(Operation.loadOffers());
+  },
+  sortOffers: (filter) => {
+    dispatch(ActionCreator.sortOffers(filter));
   }
 });
 
