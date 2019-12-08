@@ -4,6 +4,7 @@ import {ActionCreator, Operation} from '../../reducer/reducer.js';
 import {PropTypes as pt} from 'prop-types';
 import {MainPage} from './../main-page/main-page.jsx';
 import {SignIn} from '../sign-in/sign-in.jsx';
+import {PageOfPlace} from './../page-of-place/page-of-place.jsx';
 import {Switch, Route} from 'react-router-dom';
 
 
@@ -38,6 +39,13 @@ export const App = (props) => {
           auth={auth}
           login={login}
           isAuthorizationRequired={isAuthorizationRequired}
+        />}/>
+      <Route path="/offer/:id" exact render={(offerProps) =>
+        <PageOfPlace
+          offers={listOffer}
+          onFavoriteClick={favoriteClickHandler}
+          login={login}
+          {...offerProps}
         />}/>
     </Switch>
   );

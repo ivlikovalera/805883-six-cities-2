@@ -29,7 +29,7 @@ export const adapterOffers = (offer) => {
       isPro: offer.host.is_pro,
       avatarUrl: offer.host.avatar_url,
     },
-    bedrooms: offer.bedrooms,
+    numOfBedrooms: offer.bedrooms,
     goods: offer.goods,
     maxAdults: offer.max_adults,
   };
