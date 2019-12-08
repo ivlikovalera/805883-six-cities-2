@@ -1,5 +1,6 @@
 import React from "react";
 import {PropTypes as pt} from 'prop-types';
+import {Link} from 'react-router-dom';
 
 export const CardOfPlace = (props) => {
   const {id,
@@ -10,8 +11,8 @@ export const CardOfPlace = (props) => {
     rating,
     type,
     price,
-    onFavoriteClick} = props;
-
+    onFavoriteClick,
+  } = props;
   return <article className="cities__place-card place-card" id={id}>
     {isPremium ? <div className="place-card__mark">
       <span>Premium</span>
@@ -45,7 +46,7 @@ export const CardOfPlace = (props) => {
         </div>
       </div>
       <h2 className="place-card__name">
-        <a href="#">{title}</a>
+        <Link to={`/offer/${id}`} className="place-card_title">{title}</Link>
       </h2>
       <p className="place-card__type">{type}</p>
     </div>

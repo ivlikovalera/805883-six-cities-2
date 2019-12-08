@@ -17,7 +17,7 @@ export const ActionType = {
   LOAD_OFFERS: `LOAD_OFFERS`,
   AUTHORIZATION_REQUIRED: `AUTHORIZATION_REQUIRED`,
   AUTHORIZATION: `AUTHORIZATION`,
-  CHANGE_FAVORITE: `CHANGE_FAVORITE`
+  CHANGE_FAVORITE: `CHANGE_FAVORITE`,
 };
 
 export const ActionCreator = {
@@ -48,7 +48,7 @@ export const ActionCreator = {
   changeFavorite: (id) => ({
     type: ActionType.CHANGE_FAVORITE,
     payload: id,
-  })
+  }),
 };
 
 export const reducer = (state = initialState, action) => {
