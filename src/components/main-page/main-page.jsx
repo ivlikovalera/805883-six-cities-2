@@ -15,6 +15,7 @@ export const MainPage = (props) => {
     login,
     favoriteClickHandler,
     getReviews,
+    isCities,
   } = props;
   return <>
     <div style={{display: `none`}}>
@@ -58,6 +59,7 @@ export const MainPage = (props) => {
                 places={places}
                 favoriteClickHandler={favoriteClickHandler}
                 getReviews={getReviews}
+                isCities={isCities}
               />
             </section>
             <div className="cities__right-section">
@@ -85,6 +87,7 @@ MainPage.propTypes = {
   getReviews: pt.func,
   activeCity: pt.object,
   login: pt.string,
+  isCities: pt.bool,
   city: pt.shape({
     location: pt.shape({
       latitude: pt.number,

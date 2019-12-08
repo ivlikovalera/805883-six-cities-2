@@ -1,14 +1,22 @@
 import React from "react";
 import {PropTypes as pt} from 'prop-types';
+import {getDistance} from './../../utils.js';
 import {Header} from './../header/header.jsx';
 import {ListOfReviews} from './../list-of-reviews/list-of-reviews.jsx';
+import Map from './../map/map.jsx';
+import {ListOfCards} from './../list-of-cards/list-of-cards.jsx';
 
 export const PageOfPlace = (props) => {
-  const {offers,
+  const {
     onFavoriteClick,
     login,
     reviews,
+    listOffer,
+    getReviews,
   } = props;
+
+  const offer = listOffer[listOffer.findIndex((it) =>
+    it.id === parseInt(props.match.params.id, 10))];
   const {id,
     title,
     isPremium,
@@ -20,7 +28,28 @@ export const PageOfPlace = (props) => {
     numOfBedrooms,
     images,
     goods,
-  } = offers[offers.findIndex((offer) => offer.id === parseInt(props.match.params.id, 10))];
+    location,
+    description,
+  } = offer;
+
+  const distanceForCurrentOffer = listOffer.map((it) => {
+    return {
+      id: it.id,
+      distance: getDistance(location.latitude, location.longitude, it.location.latitude, it.location.longitude),
+    };
+  });
+  const sortingOffer = listOffer.sort((a, b) => {
+    const aDistance = distanceForCurrentOffer.find((it) => it.id === a.id).distance;
+    const bDistance = distanceForCurrentOffer.find((it) => it.id === b.id).distance;
+    if (aDistance > bDistance) {
+      return 1;
+    } else if (aDistance === bDistance) {
+      return 0;
+    }
+    return -1;
+  })
+  .slice(0, 4);
+
   return <div className='page'>
     <Header
       login={login}
@@ -94,10 +123,7 @@ export const PageOfPlace = (props) => {
               </div>
               <div className="property__description">
                 <p className="property__text">
-            A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. The building is green and from 18th century.
-                </p>
-                <p className="property__text">
-            An independent House, strategically located between Rembrand Square and National Opera, but where the bustle of the city comes to rest in this alley flowery and colorful.
+                  {description}
                 </p>
               </div>
             </div>
@@ -105,108 +131,21 @@ export const PageOfPlace = (props) => {
               reviews={reviews} />
           </div>
         </div>
-        <section className="property__map map"></section>
+        <section className="property__map map">
+          <Map
+            pins={sortingOffer}
+            activeCity={offer.city}
+          />
+        </section>
       </section>
       <div className="container">
         <section className="near-places places">
           <h2 className="near-places__title">Other places in the neighbourhood</h2>
-          <div className="near-places__list places__list">
-            <article className="near-places__card place-card">
-              <div className="near-places__image-wrapper place-card__image-wrapper">
-                <a href="#">
-                  <img className="place-card__image" src={`/previewImage`} width="260" height="200" alt="Place image"/>
-                </a>
-              </div>
-              <div className="place-card__info">
-                <div className="place-card__price-wrapper">
-                  <div className="place-card__price">
-                    <b className="place-card__price-value">&euro;80</b>
-                    <span className="place-card__price-text">&#47;&nbsp;night</span>
-                  </div>
-                  <button className="place-card__bookmark-button place-card__bookmark-button--active button" type="button">
-                    <svg className="place-card__bookmark-icon" width="18" height="19">
-                      <use xlinkHref="#icon-bookmark"></use>
-                    </svg>
-                    <span className="visually-hidden">In bookmarks</span>
-                  </button>
-                </div>
-                <div className="place-card__rating rating">
-                  <div className="place-card__stars rating__stars">
-                    <span style={{width: `80%`}}></span>
-                    <span className="visually-hidden">Rating</span>
-                  </div>
-                </div>
-                <h2 className="place-card__name">
-                  <a href="#">Wood and stone place</a>
-                </h2>
-                <p className="place-card__type">Private room</p>
-              </div>
-            </article>
-
-            <article className="near-places__card place-card">
-              <div className="near-places__image-wrapper place-card__image-wrapper">
-                <a href="#">
-                  <img className="place-card__image" src={`/previewImage`} width="260" height="200" alt="Place image"/>
-                </a>
-              </div>
-              <div className="place-card__info">
-                <div className="place-card__price-wrapper">
-                  <div className="place-card__price">
-                    <b className="place-card__price-value">&euro;132</b>
-                    <span className="place-card__price-text">&#47;&nbsp;night</span>
-                  </div>
-                  <button className="place-card__bookmark-button button" type="button">
-                    <svg className="place-card__bookmark-icon" width="18" height="19">
-                      <use xlinkHref="#icon-bookmark"></use>
-                    </svg>
-                    <span className="visually-hidden">To bookmarks</span>
-                  </button>
-                </div>
-                <div className="place-card__rating rating">
-                  <div className="place-card__stars rating__stars">
-                    <span style={{width: `80%`}}></span>
-                    <span className="visually-hidden">Rating</span>
-                  </div>
-                </div>
-                <h2 className="place-card__name">
-                  <a href="#">Canal View Prinsengracht</a>
-                </h2>
-                <p className="place-card__type">Apartment</p>
-              </div>
-            </article>
-
-            <article className="near-places__card place-card">
-              <div className="near-places__image-wrapper place-card__image-wrapper">
-                <a href="#">
-                  <img className="place-card__image" src={`/previewImage`} width="260" height="200" alt="Place image"/>
-                </a>
-              </div>
-              <div className="place-card__info">
-                <div className="place-card__price-wrapper">
-                  <div className="place-card__price">
-                    <b className="place-card__price-value">&euro;180</b>
-                    <span className="place-card__price-text">&#47;&nbsp;night</span>
-                  </div>
-                  <button className="place-card__bookmark-button button" type="button">
-                    <svg className="place-card__bookmark-icon" width="18" height="19">
-                      <use xlinkHref="#icon-bookmark"></use>
-                    </svg>
-                    <span className="visually-hidden">To bookmarks</span>
-                  </button>
-                </div>
-                <div className="place-card__rating rating">
-                  <div className="place-card__stars rating__stars">
-                    <span style={{width: `100%`}}></span>
-                    <span className="visually-hidden">Rating</span>
-                  </div>
-                </div>
-                <h2 className="place-card__name">
-                  <a href="#">Nice, cozy, warm big bed apartment</a>
-                </h2>
-                <p className="place-card__type">Apartment</p>
-              </div>
-            </article>
-          </div>
+          <ListOfCards
+            places={sortingOffer.slice(1, 4)}
+            getReviews={getReviews}
+            isCities={false}
+          />
         </section>
       </div>
     </main>
@@ -214,10 +153,10 @@ export const PageOfPlace = (props) => {
 };
 
 PageOfPlace.propTypes = {
-  offers: pt.array,
   match: pt.object,
   onFavoriteClick: pt.func,
   getReviews: pt.func,
   login: pt.string,
   reviews: pt.array,
+  listOffer: pt.array,
 };
