@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {ActionCreator, Operation} from '../../reducer/reducer.js';
+import {getCurrentReviews} from '../../reducer/selector.js';
 import {PropTypes as pt} from 'prop-types';
 import {MainPage} from './../main-page/main-page.jsx';
 import {SignIn} from '../sign-in/sign-in.jsx';
@@ -18,6 +19,10 @@ export const App = (props) => {
     isAuthorizationRequired,
     auth,
     login,
+    getReviews,
+    offers,
+    loadOffers,
+    reviews,
   } = props;
 
   return (
@@ -32,6 +37,7 @@ export const App = (props) => {
           favoriteClickHandler={favoriteClickHandler}
           isAuthorizationRequired={isAuthorizationRequired}
           login={login}
+          getReviews={getReviews}
         />}
       />
       <Route path="/login" exact render={() =>
@@ -40,13 +46,21 @@ export const App = (props) => {
           login={login}
           isAuthorizationRequired={isAuthorizationRequired}
         />}/>
-      <Route path="/offer/:id" exact render={(offerProps) =>
-        <PageOfPlace
-          offers={listOffer}
+      <Route path="/offer/:id" exact render={(offerProps) => {
+        if (offers.length === 0) {
+          loadOffers();
+          getReviews(parseInt(offerProps.match.params.id, 10));
+          return <div>ОЖИДАЙТЕ</div>;
+        }
+        return <PageOfPlace
+          offers={offers}
           onFavoriteClick={favoriteClickHandler}
           login={login}
+          reviews={reviews}
           {...offerProps}
-        />}/>
+        />;
+      }
+      }/>
     </Switch>
   );
 };
@@ -67,14 +81,20 @@ App.propTypes = {
   isAuthorizationRequired: pt.bool,
   auth: pt.func,
   login: pt.string,
+  getReviews: pt.func,
+  loadOffers: pt.func,
+  offers: pt.array,
+  reviews: pt.array,
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
   activeCity: state.activeCity,
   listOffer: state.listOffer,
+  offers: state.offers,
   uniqueCities: state.uniqueCities,
   isAuthorizationRequired: state.isAuthorizationRequired,
   login: state.login,
+  reviews: getCurrentReviews(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -89,6 +109,12 @@ const mapDispatchToProps = (dispatch) => ({
   auth: (authData) => {
     dispatch(Operation.authorization(authData));
   },
+  getReviews: (id) => {
+    dispatch(Operation.getReviews(id));
+  },
+  loadOffers: () => {
+    dispatch(Operation.loadOffers());
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -12,6 +12,7 @@ export const CardOfPlace = (props) => {
     type,
     price,
     onFavoriteClick,
+    getReviews,
   } = props;
   return <article className="cities__place-card place-card" id={id}>
     {isPremium ? <div className="place-card__mark">
@@ -46,7 +47,9 @@ export const CardOfPlace = (props) => {
         </div>
       </div>
       <h2 className="place-card__name">
-        <Link to={`/offer/${id}`} className="place-card_title">{title}</Link>
+        <Link to={`/offer/${id}`} className="place-card_title" onClick={() => {
+          getReviews(id);
+        }}>{title}</Link>
       </h2>
       <p className="place-card__type">{type}</p>
     </div>
@@ -57,6 +60,7 @@ CardOfPlace.propTypes = {
   id: pt.number.isRequired,
   onCardPoint: pt.func,
   onFavoriteClick: pt.func,
+  getReviews: pt.func,
   previewImage: pt.string.isRequired,
   title: pt.string.isRequired,
   isPremium: pt.bool,

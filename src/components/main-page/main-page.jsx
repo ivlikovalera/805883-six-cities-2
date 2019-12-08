@@ -14,6 +14,7 @@ export const MainPage = (props) => {
     chooseCityHandler,
     login,
     favoriteClickHandler,
+    getReviews,
   } = props;
   return <>
     <div style={{display: `none`}}>
@@ -56,6 +57,7 @@ export const MainPage = (props) => {
               <ListOfCards
                 places={places}
                 favoriteClickHandler={favoriteClickHandler}
+                getReviews={getReviews}
               />
             </section>
             <div className="cities__right-section">
@@ -80,6 +82,7 @@ MainPage.propTypes = {
   uniqueCities: pt.array,
   chooseCityHandler: pt.func,
   favoriteClickHandler: pt.func,
+  getReviews: pt.func,
   activeCity: pt.object,
   login: pt.string,
   city: pt.shape({

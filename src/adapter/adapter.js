@@ -35,12 +35,27 @@ export const adapterOffers = (offer) => {
   };
 };
 
-export const adapterUserData = (userData) => {
+export const adapterUserData = (user) => {
   return {
-    id: userData.id,
-    email: userData.email,
-    name: userData.name,
-    avatarUrl: userData.avatar_url,
-    isPro: userData.is_pro,
+    id: user.id,
+    email: user.email,
+    name: user.name,
+    avatarUrl: user.avatar_url,
+    isPro: user.is_pro,
+  };
+};
+
+export const adapterReviewData = (review) => {
+  return {
+    id: review.id,
+    user: {
+      id: review.user.id,
+      name: review.user.name,
+      avatarUrl: review.user.avatar_url,
+      isPro: review.user.is_pro,
+    },
+    rating: review.rating,
+    comment: review.comment,
+    date: review.date,
   };
 };
