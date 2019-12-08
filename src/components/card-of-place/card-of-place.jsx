@@ -12,12 +12,14 @@ export const CardOfPlace = (props) => {
     type,
     price,
     onFavoriteClick,
+    getReviews,
+    isCities,
   } = props;
-  return <article className="cities__place-card place-card" id={id}>
+  return <article className={isCities ? `cities__place-card place-card` : `near-places__card place-card`} id={id}>
     {isPremium ? <div className="place-card__mark">
       <span>Premium</span>
     </div> : null}
-    <div className="cities__image-wrapper place-card__image-wrapper">
+    <div className={isCities ? `cities__image-wrapper place-card__image-wrapper` : `near-places__image-wrapper place-card__image-wrapper`}>
       <a href="#">
         <img className="place-card__image" src={previewImage} width="260" height="200" alt="Place image"/>
       </a>
@@ -46,7 +48,9 @@ export const CardOfPlace = (props) => {
         </div>
       </div>
       <h2 className="place-card__name">
-        <Link to={`/offer/${id}`} className="place-card_title">{title}</Link>
+        <Link to={`/offer/${id}`} className="place-card_title" onClick={() => {
+          getReviews(id);
+        }}>{title}</Link>
       </h2>
       <p className="place-card__type">{type}</p>
     </div>
@@ -57,6 +61,7 @@ CardOfPlace.propTypes = {
   id: pt.number.isRequired,
   onCardPoint: pt.func,
   onFavoriteClick: pt.func,
+  getReviews: pt.func,
   previewImage: pt.string.isRequired,
   title: pt.string.isRequired,
   isPremium: pt.bool,
@@ -64,4 +69,5 @@ CardOfPlace.propTypes = {
   rating: pt.number.isRequired,
   type: pt.string.isRequired,
   price: pt.number.isRequired,
+  isCities: pt.bool,
 };

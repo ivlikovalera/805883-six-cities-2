@@ -1,14 +1,16 @@
 import {getUniqueCities} from './../utils.js';
-import {adapterOffers, adapterUserData} from './../adapter/adapter.js';
+import {adapterOffers, adapterUserData, adapterReviewData} from './../adapter/adapter.js';
 
 const initialState = {
   activeCity: {},
+  isFetching: false,
   listOffer: [],
   uniqueCities: [],
   offers: [],
   isAuthorizationRequired: true,
-  userData: {},
+  user: {},
   login: `Sign in`,
+  reviews: [],
 };
 
 export const ActionType = {
@@ -18,6 +20,8 @@ export const ActionType = {
   AUTHORIZATION_REQUIRED: `AUTHORIZATION_REQUIRED`,
   AUTHORIZATION: `AUTHORIZATION`,
   CHANGE_FAVORITE: `CHANGE_FAVORITE`,
+  GET_REVIEWS: `GET_REVIEWS`,
+  CHANGE_FETCHING: `CHANGE_FETCHING`,
 };
 
 export const ActionCreator = {
@@ -30,9 +34,12 @@ export const ActionCreator = {
     type: ActionType.GET_LIST_OF_OFFERS,
   }),
 
-  loadOffers: (offers) => ({
+  loadOffers: (offers, uniqueCities) => ({
     type: ActionType.LOAD_OFFERS,
-    payload: offers,
+    payload: {
+      offers,
+      uniqueCities,
+    }
   }),
 
   authorizationRequired: (status) => ({
@@ -40,18 +47,34 @@ export const ActionCreator = {
     payload: status,
   }),
 
-  authorization: (userData) => ({
+  authorization: (user) => ({
     type: ActionType.AUTHORIZATION,
-    payload: userData,
+    payload: user,
   }),
 
   changeFavorite: (id) => ({
     type: ActionType.CHANGE_FAVORITE,
     payload: id,
   }),
+
+  getReviews: (id, reviews) => ({
+    type: ActionType.GET_REVIEWS,
+    payload: {
+      id,
+      reviews,
+    }
+  }),
+  changeFetching: (status) => ({
+    type: ActionType.CHANGE_FETCHING,
+    payload: status,
+  }),
 };
 
 export const reducer = (state = initialState, action) => {
+  const findOfferIndexById = (id) => {
+    return state.offers.findIndex((offer) => offer.id === id);
+  };
+
   switch (action.type) {
     case ActionType.CHANGE_CITY:
       return Object.assign({}, state, {
@@ -62,11 +85,9 @@ export const reducer = (state = initialState, action) => {
         listOffer: state.offers.filter((offer) => offer.city.name === state.activeCity.name)
       });
     case ActionType.LOAD_OFFERS:
-      const cities = getUniqueCities(action.payload);
       return Object.assign({}, state, {
-        offers: action.payload.map((offer) => adapterOffers(offer)),
-        uniqueCities: cities,
-        activeCity: cities[Math.floor(Math.random() * 5)],
+        offers: action.payload.offers,
+        uniqueCities: action.payload.uniqueCities,
       });
     case ActionType.AUTHORIZATION_REQUIRED:
       return Object.assign({}, state, {
@@ -78,8 +99,19 @@ export const reducer = (state = initialState, action) => {
         userData: adapterUserData(action.payload),
       });
     case ActionType.CHANGE_FAVORITE:
-      state.offers[state.offers.findIndex((offer) => offer.id === action.payload)].isFavorite = !state.offers[state.offers.findIndex((offer) => offer.id === action.payload)].isFavorite;
+      const offerIndex = findOfferIndexById(action.payload);
+      state.offers[offerIndex].isFavorite = !state.offers[offerIndex].isFavorite;
       return Object.assign({}, state);
+
+    case ActionType.GET_REVIEWS:
+      const reviews = action.payload.reviews.map((it) => adapterReviewData(it));
+      return Object.assign({}, state, {
+        reviews,
+      });
+    case ActionType.CHANGE_FETCHING:
+      return Object.assign({}, state, {
+        isFetching: action.payload,
+      });
   }
   return state;
 };
@@ -88,9 +120,33 @@ export const Operation = {
   loadOffers: () => (dispatch, _getState, api) => {
     return api.get(`/hotels`)
       .then((response) => {
-        const loadedOffers = response.data;
-        dispatch(ActionCreator.loadOffers(loadedOffers));
+        const allOffers = response.data.map((offer) => adapterOffers(offer));
+        const uniqueCities = getUniqueCities(allOffers);
+        dispatch(ActionCreator.loadOffers(allOffers, uniqueCities));
+        dispatch(ActionCreator.changeCity(uniqueCities[Math.floor(Math.random() * 5)].name));
         dispatch(ActionCreator.getOffers());
+        dispatch(ActionCreator.changeFetching(false));
+      });
+  },
+  loadOffersInOfferPage: (id) => (dispatch, _getState, api) => {
+    return api.get(`/hotels`)
+      .then((response) => {
+        const allOffers = response.data.map((offer) => adapterOffers(offer));
+        const uniqueCities = getUniqueCities(allOffers);
+        dispatch(ActionCreator.loadOffers(allOffers, uniqueCities));
+        dispatch(ActionCreator.changeCity(allOffers[allOffers.findIndex(
+            (it) => it.id === id)].city.name));
+        dispatch(ActionCreator.getOffers());
+        dispatch(Operation.getReviews(id));
+      });
+  },
+  getReviews: (id) => (dispatch, _getState, api) => {
+    return api.get(`/comments/${id}`)
+      .then((response) => {
+        if (response.status === 200) {
+          dispatch(ActionCreator.getReviews(id, response.data));
+        }
+        dispatch(ActionCreator.changeFetching(false));
       });
   },
   authorizationStatus: () => (dispatch, _getState, api) => {
@@ -109,5 +165,5 @@ export const Operation = {
           dispatch(ActionCreator.authorizationRequired(false));
         }
       });
-  }
+  },
 };

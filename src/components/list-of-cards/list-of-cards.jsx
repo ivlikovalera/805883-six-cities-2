@@ -3,9 +3,9 @@ import {PropTypes as pt} from 'prop-types';
 import {CardOfPlace} from '../card-of-place/card-of-place.jsx';
 
 export const ListOfCards = (props) => {
-  const {places, cardPointHandler, favoriteClickHandler} = props;
+  const {places, favoriteClickHandler, getReviews, isCities} = props;
 
-  return <div className="cities__places-list places__list tabs__content">
+  return <div className={isCities ? `cities__places-list places__list tabs__content` : `near-places__list places__list`}>
     {places.map((it) => <CardOfPlace
       key={it.id}
       id={it.id}
@@ -16,8 +16,9 @@ export const ListOfCards = (props) => {
       rating={it.rating}
       type={it.type}
       price={it.price}
-      onCardPoint={cardPointHandler}
       onFavoriteClick={favoriteClickHandler}
+      getReviews={getReviews}
+      isCities={isCities}
     />)}
   </div>;
 };
@@ -25,7 +26,9 @@ export const ListOfCards = (props) => {
 ListOfCards.propTypes = {
   cardPointHandler: pt.func,
   favoriteClickHandler: pt.func,
+  getReviews: pt.func,
   places: pt.array.isRequired,
+  isCities: pt.bool,
   offer: pt.shape({
     previewImage: pt.string,
     title: pt.string,

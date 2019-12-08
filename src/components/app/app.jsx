@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {ActionCreator, Operation} from '../../reducer/reducer.js';
+import {getCurrentReviews} from '../../reducer/selector.js';
 import {PropTypes as pt} from 'prop-types';
 import {MainPage} from './../main-page/main-page.jsx';
 import {SignIn} from '../sign-in/sign-in.jsx';
@@ -18,12 +19,26 @@ export const App = (props) => {
     isAuthorizationRequired,
     auth,
     login,
+    getReviews,
+    offers,
+    reviews,
+    loadOffersInOfferPage,
+    isFetching,
+    changeFetching,
+    loadOffers,
   } = props;
 
   return (
     <Switch>
-      <Route path="/" exact render={() =>
-        <MainPage
+      <Route path="/" exact render={() => {
+        if (offers.length === 0) {
+          if (isFetching === false) {
+            changeFetching(true);
+            loadOffers();
+          }
+          return <div>ПОДОЖДИТЕ</div>;
+        }
+        return <MainPage
           places={listOffer}
           pins={listOffer}
           uniqueCities={uniqueCities}
@@ -32,21 +47,36 @@ export const App = (props) => {
           favoriteClickHandler={favoriteClickHandler}
           isAuthorizationRequired={isAuthorizationRequired}
           login={login}
-        />}
-      />
+          getReviews={getReviews}
+          isCities={true}
+        />;
+      }
+      }/>
       <Route path="/login" exact render={() =>
         <SignIn
           auth={auth}
           login={login}
           isAuthorizationRequired={isAuthorizationRequired}
-        />}/>
-      <Route path="/offer/:id" exact render={(offerProps) =>
-        <PageOfPlace
-          offers={listOffer}
+        />}
+      />
+      <Route path="/offer/:id" exact render={(offerProps) => {
+        if (listOffer.length === 0) {
+          if (isFetching === false) {
+            changeFetching(true);
+            loadOffersInOfferPage(parseInt(offerProps.match.params.id, 10));
+          }
+          return <div>ПОДОЖДИТЕ</div>;
+        }
+        return <PageOfPlace
           onFavoriteClick={favoriteClickHandler}
           login={login}
+          reviews={reviews}
+          listOffer={listOffer}
+          getReviews={getReviews}
           {...offerProps}
-        />}/>
+        />;
+      }
+      }/>
     </Switch>
   );
 };
@@ -67,14 +97,24 @@ App.propTypes = {
   isAuthorizationRequired: pt.bool,
   auth: pt.func,
   login: pt.string,
+  getReviews: pt.func,
+  loadOffersInOfferPage: pt.func,
+  offers: pt.array,
+  reviews: pt.array,
+  isFetching: pt.bool,
+  changeFetching: pt.func,
+  loadOffers: pt.func,
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
   activeCity: state.activeCity,
   listOffer: state.listOffer,
+  offers: state.offers,
   uniqueCities: state.uniqueCities,
   isAuthorizationRequired: state.isAuthorizationRequired,
   login: state.login,
+  reviews: getCurrentReviews(state),
+  isFetching: state.isFetching,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -89,6 +129,18 @@ const mapDispatchToProps = (dispatch) => ({
   auth: (authData) => {
     dispatch(Operation.authorization(authData));
   },
+  getReviews: (id) => {
+    dispatch(Operation.getReviews(id));
+  },
+  loadOffersInOfferPage: (id) => {
+    dispatch(Operation.loadOffersInOfferPage(id));
+  },
+  changeFetching: (status) => {
+    dispatch(ActionCreator.changeFetching(status));
+  },
+  loadOffers: () => {
+    dispatch(Operation.loadOffers());
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import thunk from 'redux-thunk';
-import {reducer, Operation} from './reducer/reducer.js';
+import {reducer} from './reducer/reducer.js';
 import {createStore, applyMiddleware} from 'redux';
 import {createAPI} from './api.js';
 import {Provider} from 'react-redux';
@@ -18,8 +18,6 @@ const init = () => {
           window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : (f) => f
       )
   );
-
-  store.dispatch(Operation.loadOffers());
 
   ReactDOM.render(<Provider store={store}>
     <BrowserRouter>

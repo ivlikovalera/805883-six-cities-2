@@ -3,7 +3,7 @@ import L from 'leaflet';
 import {PropTypes as pt} from 'prop-types';
 
 const icon = L.icon({
-  iconUrl: `img/pin.svg`,
+  iconUrl: `/img/pin.svg`,
   iconSize: [30, 30]
 });
 
