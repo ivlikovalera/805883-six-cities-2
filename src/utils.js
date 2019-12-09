@@ -12,7 +12,7 @@ export const getUniqueCities = (offers) => {
       namesOfUniqueCities.push(offer.city);
     }
   });
-  return namesOfUniqueCities;
+  return namesOfUniqueCities.slice(0, 6);
 };
 
 export const getDistance = (lat1, lon1, lat2, lon2) => {

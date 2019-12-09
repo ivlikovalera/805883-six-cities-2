@@ -1,18 +1,59 @@
 import {Operation, reducer, ActionType} from './reducer.js';
-import MockAdapter from "axios-mock-adapter";
-import {createAPI} from "./../api.js";
+import MockAdapter from 'axios-mock-adapter';
+import {createAPI} from './../api.js';
+// import {adapterOffers} from './../adapter/adapter.js';
+
+const fakeOfferData = () => {
+  return [{
+    id: 1,
+    city: {
+      name: `Barnaul`,
+      location: {
+        latitude: 12,
+        longitude: 5,
+        zoom: 3
+      },
+    },
+    previewImage: `localhost:1177/`,
+    isPremium: false,
+    isFavorite: true,
+    price: 12,
+    title: `Hotel`,
+    type: `Palace`,
+    rating: 3,
+    images: [`/12.jpg`, `/15.jpg`],
+    location: {
+      latitude: 3.44,
+      longitude: 16.55,
+      zoom: 7,
+    },
+    description: `Description`,
+    host: {
+      id: `7`,
+      name: `Vasya`,
+      isPro: true,
+      avatarUrl: `user1.jpg`,
+    },
+    numOfBedrooms: 3,
+    goods: 2,
+    maxAdults: 5,
+  }];
+};
 
 describe(`reducer`, () => {
   it(`should return the initial state`, () => {
     expect(reducer(undefined, {})).toEqual(
         {
           activeCity: {},
+          isFetching: false,
           listOffer: [],
           uniqueCities: [],
           offers: [],
           isAuthorizationRequired: true,
-          userData: {},
+          user: {},
           login: `Sign in`,
+          reviews: [],
+          activeOfferId: null,
         }
     );
   });
@@ -25,18 +66,22 @@ describe(`reducer`, () => {
 
     apiMock
       .onGet(`/hotels`)
-      .reply(200, [{fake: true}]);
+      .reply(200, fakeOfferData());
 
     return offersLoader(dispatch, jest.fn(), api)
       .then(() => {
-        expect(dispatch).toHaveBeenCalledTimes(2);
-        expect(dispatch).toHaveBeenNthCalledWith(1, {
+        expect(dispatch).toHaveBeenCalledTimes(4);
+        /* expect(dispatch).toHaveBeenNthCalledWith(1, {
           type: ActionType.LOAD_OFFERS,
-          payload: [{fake: true}],
+          payload: {
+            offers: adapterOffers(fakeOfferData()),
+            uniqueCities: adapterOffers(fakeOfferData())[0].city,
+          },
         });
         expect(dispatch).toHaveBeenNthCalledWith(2, {
-          type: ActionType.GET_LIST_OF_OFFERS,
-        });
+          type: ActionType.CHANGE_CITY,
+          payload: adapterOffers(fakeOfferData())[0].city.name
+        }); */
       });
   });
 

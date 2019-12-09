@@ -2,6 +2,7 @@ import React from 'react';
 import {PropTypes as pt} from 'prop-types';
 import {ListOfCards} from '../list-of-cards/list-of-cards.jsx';
 import {ListOfCities} from '../list-of-cities/list-of-cities.jsx';
+import {EmptyMainPage} from '../empty-main-page/empty-main-page.jsx';
 import SortingOptions from './../sorting-options/sorting-options.jsx';
 import {Header} from './../header/header.jsx';
 import Map from './../map/map.jsx';
@@ -31,7 +32,7 @@ export const MainPage = (props) => {
         login={login}
         changeActive={changeActive}
       />
-      <main className='page__main page__main--index'>
+      <main className={places.length !== 0 ? `page__main page__main--index` : `page__main page__main--index page__main--index-empty`}>
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <ListOfCities
@@ -41,30 +42,31 @@ export const MainPage = (props) => {
           />
         </div>
         <div className="cities">
-          <div className="cities__places-container container">
-            <section className="cities__places places">
-              <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{places.length} places to stay in {activeCity.name}</b>
-              <SortingOptions
-                sortOffers={sortOffers}
-              />
-              <ListOfCards
-                places={places}
-                favoriteClickHandler={favoriteClickHandler}
-                getReviews={getReviews}
-                isCities={isCities}
-                changeActive={changeActive}
-              />
-            </section>
+          <div className={places.length !== 0 ? `cities__places-container container` : `cities__places-container container cities__places-container--empty`}>
+            {places.length === 0 ? <EmptyMainPage/> :
+              <section className="cities__places places">
+                <h2 className="visually-hidden">Places</h2>
+                <b className="places__found">{places.length} places to stay in {activeCity.name}</b>
+                <SortingOptions
+                  sortOffers={sortOffers}
+                />
+                <ListOfCards
+                  places={places}
+                  favoriteClickHandler={favoriteClickHandler}
+                  getReviews={getReviews}
+                  isCities={isCities}
+                  changeActive={changeActive}
+                />
+              </section>}
             <div className="cities__right-section">
-              <section className="cities__map map">{
+              {places.length === 0 ? null : <section className="cities__map map">{
                 <Map
                   pins={pins}
                   activeOfferId={activeOfferId}
                   centerOfMap={activeCity.location}
                 />
               }
-              </section>
+              </section>}
             </div>
           </div>
         </div>
