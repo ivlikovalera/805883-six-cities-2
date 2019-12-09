@@ -13,6 +13,7 @@ export const PageOfPlace = (props) => {
     reviews,
     listOffer,
     getReviews,
+    changeActive,
   } = props;
 
   const offer = listOffer[listOffer.findIndex((it) =>
@@ -53,6 +54,7 @@ export const PageOfPlace = (props) => {
   return <div className='page'>
     <Header
       login={login}
+      changeActive={changeActive}
     />
     <main className="page__main page__main--property">
       <section className="property" id={id}>
@@ -134,7 +136,8 @@ export const PageOfPlace = (props) => {
         <section className="property__map map">
           <Map
             pins={sortingOffer}
-            activeCity={offer.city}
+            activeOfferId={id}
+            centerOfMap={sortingOffer[0].location}
           />
         </section>
       </section>
@@ -145,6 +148,7 @@ export const PageOfPlace = (props) => {
             places={sortingOffer.slice(1, 4)}
             getReviews={getReviews}
             isCities={false}
+            changeActive={changeActive}
           />
         </section>
       </div>
@@ -159,4 +163,6 @@ PageOfPlace.propTypes = {
   login: pt.string,
   reviews: pt.array,
   listOffer: pt.array,
+  activeOfferId: pt.number,
+  changeActive: pt.func,
 };

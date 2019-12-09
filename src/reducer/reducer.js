@@ -11,6 +11,7 @@ const initialState = {
   user: {},
   login: `Sign in`,
   reviews: [],
+  activeOfferId: null,
 };
 
 export const ActionType = {
@@ -23,6 +24,7 @@ export const ActionType = {
   GET_REVIEWS: `GET_REVIEWS`,
   CHANGE_FETCHING: `CHANGE_FETCHING`,
   SORT_OFFERS: `SORT_OFFERS`,
+  CHANGE_ACTIVE: `CHANGE_ACTIVE`,
 };
 
 export const ActionCreator = {
@@ -65,13 +67,20 @@ export const ActionCreator = {
       reviews,
     }
   }),
+
   changeFetching: (status) => ({
     type: ActionType.CHANGE_FETCHING,
     payload: status,
   }),
+
   sortOffers: (filter) => ({
     type: ActionType.SORT_OFFERS,
     payload: filter,
+  }),
+
+  changeActive: (id) => ({
+    type: ActionType.CHANGE_ACTIVE,
+    payload: id,
   })
 };
 
@@ -126,6 +135,11 @@ export const reducer = (state = initialState, action) => {
         listOffer: filterOffers.slice(),
       });
     }
+    case ActionType.CHANGE_ACTIVE: {
+      return Object.assign({}, state, {
+        activeOfferId: action.payload,
+      });
+    }
   }
   return state;
 };
@@ -152,6 +166,7 @@ export const Operation = {
             (it) => it.id === id)].city.name));
         dispatch(ActionCreator.getOffers());
         dispatch(Operation.getReviews(id));
+        dispatch(ActionCreator.changeActive(id));
       });
   },
   getReviews: (id) => (dispatch, _getState, api) => {

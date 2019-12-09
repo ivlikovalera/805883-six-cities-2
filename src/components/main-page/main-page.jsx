@@ -18,6 +18,8 @@ export const MainPage = (props) => {
     getReviews,
     isCities,
     sortOffers,
+    changeActive,
+    activeOfferId,
   } = props;
   return <>
     <div style={{display: `none`}}>
@@ -27,6 +29,7 @@ export const MainPage = (props) => {
     <div className='page page--gray page--main'>
       <Header
         login={login}
+        changeActive={changeActive}
       />
       <main className='page__main page__main--index'>
         <h1 className="visually-hidden">Cities</h1>
@@ -50,13 +53,15 @@ export const MainPage = (props) => {
                 favoriteClickHandler={favoriteClickHandler}
                 getReviews={getReviews}
                 isCities={isCities}
+                changeActive={changeActive}
               />
             </section>
             <div className="cities__right-section">
               <section className="cities__map map">{
                 <Map
                   pins={pins}
-                  activeCity={activeCity}
+                  activeOfferId={activeOfferId}
+                  centerOfMap={activeCity.location}
                 />
               }
               </section>
@@ -79,6 +84,8 @@ MainPage.propTypes = {
   login: pt.string,
   isCities: pt.bool,
   sortOffers: pt.func,
+  changeActive: pt.func,
+  activeOfferId: pt.number,
   city: pt.shape({
     location: pt.shape({
       latitude: pt.number,

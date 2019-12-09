@@ -7,6 +7,11 @@ const icon = L.icon({
   iconSize: [30, 30]
 });
 
+const activeIcon = L.icon({
+  iconUrl: `/img/pin-active.svg`,
+  iconSize: [30, 30]
+});
+
 export default class Map extends React.PureComponent {
   _addPins(pins) {
     this.markers = [];
@@ -14,19 +19,21 @@ export default class Map extends React.PureComponent {
       const latitude = pin.location.latitude;
       const longitude = pin.location.longitude;
       const coordinates = [latitude, longitude];
-      this.markers.push(L.marker(coordinates, {icon}).addTo(this.map));
+      this.markers.push(L.marker(coordinates, {icon: this.activeOfferId === pin.id ? activeIcon : icon}).addTo(this.map));
     });
   }
+
   componentDidMount() {
-    const {pins, activeCity} = this.props;
+    const {pins, centerOfMap} = this.props;
+    this.activeOfferId = this.props.activeOfferId;
     this.map = L.map(`map`, {
-      center: Object.keys(activeCity).length ? [activeCity.location.latitude, activeCity.location.longitude] : [0, 0],
-      zoom: 10,
+      center: centerOfMap ? [centerOfMap.latitude, centerOfMap.longitude] : [0, 0],
+      zoom: centerOfMap ? centerOfMap.zoom : 0,
       layers: [
         L.tileLayer(`https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png`, {
           attribution:
-          `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>
-          contributors &copy; <a href="https://carto.com/attributions">CARTO</a>`
+            `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>
+            contributors &copy; <a href="https://carto.com/attributions">CARTO</a>`
         })
       ]
     });
@@ -35,8 +42,9 @@ export default class Map extends React.PureComponent {
   }
 
   componentDidUpdate() {
-    const {activeCity, pins} = this.props;
-    this.map.setView([activeCity.location.latitude, activeCity.location.longitude], 10);
+    const {centerOfMap, pins} = this.props;
+    this.activeOfferId = this.props.activeOfferId;
+    this.map.setView([centerOfMap.latitude, centerOfMap.longitude], centerOfMap.zoom);
     this.markers.forEach((marker) => {
       this.map.removeLayer(marker);
     });
@@ -50,13 +58,11 @@ export default class Map extends React.PureComponent {
 }
 
 Map.propTypes = {
-  latitude: pt.number,
-  longitude: pt.number,
+  activeOfferId: pt.number,
   pins: pt.array,
-  activeCity: pt.shape({
-    location: pt.shape({
-      latitude: pt.number,
-      longitude: pt.number,
-    })
+  centerOfMap: pt.shape({
+    latitude: pt.number,
+    longitude: pt.number,
+    zoom: pt.number
   })
 };

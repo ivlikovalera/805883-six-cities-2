@@ -14,8 +14,19 @@ export const CardOfPlace = (props) => {
     onFavoriteClick,
     getReviews,
     isCities,
+    changeActive,
   } = props;
-  return <article className={isCities ? `cities__place-card place-card` : `near-places__card place-card`} id={id}>
+  return <article className={isCities ? `cities__place-card place-card` : `near-places__card place-card`} id={id} onMouseOver={() => {
+    if (isCities) {
+      changeActive(id);
+    }
+  }
+  } onMouseOut={() => {
+    if (isCities) {
+      changeActive();
+    }
+  }
+  }>
     {isPremium ? <div className="place-card__mark">
       <span>Premium</span>
     </div> : null}
@@ -50,6 +61,7 @@ export const CardOfPlace = (props) => {
       <h2 className="place-card__name">
         <Link to={`/offer/${id}`} className="place-card_title" onClick={() => {
           getReviews(id);
+          changeActive(id);
         }}>{title}</Link>
       </h2>
       <p className="place-card__type">{type}</p>
@@ -70,4 +82,5 @@ CardOfPlace.propTypes = {
   type: pt.string.isRequired,
   price: pt.number.isRequired,
   isCities: pt.bool,
+  changeActive: pt.func,
 };
