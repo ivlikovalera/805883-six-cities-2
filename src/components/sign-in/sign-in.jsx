@@ -8,6 +8,7 @@ export class SignIn extends React.PureComponent {
     super(props);
     this.auth = this.props.auth;
     this.login = this.props.login;
+    this.changeActive = this.props.changeActive;
 
     this.state = {
       email: ``,
@@ -23,6 +24,7 @@ export class SignIn extends React.PureComponent {
         <div className='page page--gray page--login'>
           <Header
             login={this.login}
+            changeActive={this.changeActive}
           />
           <main className='page__main page__main--login'>
             <h1 className="visually-hidden">Login</h1>
@@ -71,6 +73,7 @@ SignIn.propTypes = {
   auth: pt.func,
   login: pt.string,
   isAuthorizationRequired: pt.bool,
+  changeActive: pt.func,
 };
 
 

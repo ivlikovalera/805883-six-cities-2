@@ -26,6 +26,9 @@ export const App = (props) => {
     isFetching,
     changeFetching,
     loadOffers,
+    sortOffers,
+    changeActive,
+    activeOfferId,
   } = props;
 
   return (
@@ -49,6 +52,9 @@ export const App = (props) => {
           login={login}
           getReviews={getReviews}
           isCities={true}
+          sortOffers={sortOffers}
+          changeActive={changeActive}
+          activeOfferId={activeOfferId}
         />;
       }
       }/>
@@ -57,6 +63,7 @@ export const App = (props) => {
           auth={auth}
           login={login}
           isAuthorizationRequired={isAuthorizationRequired}
+          changeActive={changeActive}
         />}
       />
       <Route path="/offer/:id" exact render={(offerProps) => {
@@ -73,6 +80,7 @@ export const App = (props) => {
           reviews={reviews}
           listOffer={listOffer}
           getReviews={getReviews}
+          changeActive={changeActive}
           {...offerProps}
         />;
       }
@@ -104,6 +112,9 @@ App.propTypes = {
   isFetching: pt.bool,
   changeFetching: pt.func,
   loadOffers: pt.func,
+  sortOffers: pt.func,
+  activeOfferId: pt.number,
+  changeActive: pt.func,
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
@@ -115,6 +126,7 @@ const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
   login: state.login,
   reviews: getCurrentReviews(state),
   isFetching: state.isFetching,
+  activeOfferId: state.activeOfferId,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -124,7 +136,6 @@ const mapDispatchToProps = (dispatch) => ({
   },
   favoriteClickHandler: (id) => {
     dispatch(ActionCreator.changeFavorite(id));
-    dispatch(ActionCreator.getOffers());
   },
   auth: (authData) => {
     dispatch(Operation.authorization(authData));
@@ -140,6 +151,12 @@ const mapDispatchToProps = (dispatch) => ({
   },
   loadOffers: () => {
     dispatch(Operation.loadOffers());
+  },
+  sortOffers: (filter) => {
+    dispatch(ActionCreator.sortOffers(filter));
+  },
+  changeActive: (id = null) => {
+    dispatch(ActionCreator.changeActive(id));
   }
 });
 
