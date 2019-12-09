@@ -179,6 +179,14 @@ export const Operation = {
         dispatch(ActionCreator.changeFetching(false));
       });
   },
+  sendReview: (review, id) => (dispatch, _getState, api) => {
+    return api.post(`/comments/${id}`, review)
+      .then((response) => {
+        if (response.status === 200) {
+          dispatch(Operation.getReviews(id));
+        }
+      });
+  },
   authorizationStatus: () => (dispatch, _getState, api) => {
     return api.get(`/login`)
       .then((response) => {

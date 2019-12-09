@@ -14,6 +14,7 @@ export const PageOfPlace = (props) => {
     listOffer,
     getReviews,
     changeActive,
+    sendReview,
   } = props;
 
   const offer = listOffer[listOffer.findIndex((it) =>
@@ -23,6 +24,7 @@ export const PageOfPlace = (props) => {
     isPremium,
     isFavorite,
     host,
+    type,
     rating,
     price,
     maxAdults,
@@ -88,14 +90,14 @@ export const PageOfPlace = (props) => {
             </div>
             <div className="property__rating rating">
               <div className="property__stars rating__stars">
-                <span style={{width: `96%`}}></span>
+                <span style={{width: `${rating / 5 * 100}%`}}></span>
                 <span className="visually-hidden">Rating</span>
               </div>
               <span className="property__rating-value rating__value">{rating}</span>
             </div>
             <ul className="property__features">
               <li className="property__feature property__feature--entire">
-          Entire place
+                {type}
               </li>
               <li className="property__feature property__feature--bedrooms">
                 {numOfBedrooms === 1 ? `${numOfBedrooms} Bedroom` : `${numOfBedrooms} Bedrooms`}
@@ -130,7 +132,10 @@ export const PageOfPlace = (props) => {
               </div>
             </div>
             <ListOfReviews
-              reviews={reviews} />
+              id={id}
+              reviews={reviews}
+              sendReview={sendReview}
+            />
           </div>
         </div>
         <section className="property__map map">
@@ -165,4 +170,5 @@ PageOfPlace.propTypes = {
   listOffer: pt.array,
   activeOfferId: pt.number,
   changeActive: pt.func,
+  sendReview: pt.func,
 };
