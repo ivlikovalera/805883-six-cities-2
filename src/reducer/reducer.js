@@ -151,7 +151,8 @@ export const Operation = {
         const allOffers = response.data.map((offer) => adapterOffers(offer));
         const uniqueCities = getUniqueCities(allOffers);
         dispatch(ActionCreator.loadOffers(allOffers, uniqueCities));
-        dispatch(ActionCreator.changeCity(uniqueCities[Math.floor(Math.random() * 5)].name));
+        dispatch(ActionCreator.changeCity(uniqueCities[Math.
+          floor(Math.random() * (uniqueCities.length - 1))].name));
         dispatch(ActionCreator.getOffers());
         dispatch(ActionCreator.changeFetching(false));
       });

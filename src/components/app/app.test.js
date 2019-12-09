@@ -12,10 +12,12 @@ it(`App correctly renders after relaunch`, () => {
       activeCity={{}}
       chooseCityHandler={() => {}}
       listOffer={[]}
+      offers={[]}
       favoriteClickHandler={() => {}}
       login={``}
       auth={() => {}}
       isAuthorizationRequired={true || false}
+      isFetching={true || false}
     />
   </BrowserRouter>)
   .toJSON();
