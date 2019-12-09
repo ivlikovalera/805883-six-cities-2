@@ -14,6 +14,7 @@ export const PageOfPlace = (props) => {
     listOffer,
     getReviews,
     changeActive,
+    sendReview,
   } = props;
 
   const offer = listOffer[listOffer.findIndex((it) =>
@@ -130,7 +131,10 @@ export const PageOfPlace = (props) => {
               </div>
             </div>
             <ListOfReviews
-              reviews={reviews} />
+              id={id}
+              reviews={reviews}
+              sendReview={sendReview}
+            />
           </div>
         </div>
         <section className="property__map map">
@@ -165,4 +169,5 @@ PageOfPlace.propTypes = {
   listOffer: pt.array,
   activeOfferId: pt.number,
   changeActive: pt.func,
+  sendReview: pt.func,
 };

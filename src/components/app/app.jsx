@@ -1,12 +1,12 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {Switch, Route, Redirect} from 'react-router-dom';
 import {ActionCreator, Operation} from '../../reducer/reducer.js';
 import {getCurrentReviews} from '../../reducer/selector.js';
 import {PropTypes as pt} from 'prop-types';
 import {MainPage} from './../main-page/main-page.jsx';
 import {SignIn} from '../sign-in/sign-in.jsx';
 import {PageOfPlace} from './../page-of-place/page-of-place.jsx';
-import {Switch, Route} from 'react-router-dom';
 
 
 export const App = (props) => {
@@ -29,6 +29,7 @@ export const App = (props) => {
     sortOffers,
     changeActive,
     activeOfferId,
+    sendReview,
   } = props;
 
   return (
@@ -67,6 +68,9 @@ export const App = (props) => {
         />}
       />
       <Route path="/offer/:id" exact render={(offerProps) => {
+        if (isAuthorizationRequired) {
+          return <Redirect to="/login" />;
+        }
         if (listOffer.length === 0) {
           if (isFetching === false) {
             changeFetching(true);
@@ -81,6 +85,7 @@ export const App = (props) => {
           listOffer={listOffer}
           getReviews={getReviews}
           changeActive={changeActive}
+          sendReview={sendReview}
           {...offerProps}
         />;
       }
@@ -115,6 +120,7 @@ App.propTypes = {
   sortOffers: pt.func,
   activeOfferId: pt.number,
   changeActive: pt.func,
+  sendReview: pt.func,
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
@@ -157,6 +163,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   changeActive: (id = null) => {
     dispatch(ActionCreator.changeActive(id));
+  },
+  sendReview: (review, id) => {
+    dispatch(Operation.sendReview(review, id));
   }
 });
 
