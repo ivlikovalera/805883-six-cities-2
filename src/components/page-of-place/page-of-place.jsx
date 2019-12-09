@@ -24,6 +24,7 @@ export const PageOfPlace = (props) => {
     isPremium,
     isFavorite,
     host,
+    type,
     rating,
     price,
     maxAdults,
@@ -89,14 +90,14 @@ export const PageOfPlace = (props) => {
             </div>
             <div className="property__rating rating">
               <div className="property__stars rating__stars">
-                <span style={{width: `96%`}}></span>
+                <span style={{width: `${rating / 5 * 100}%`}}></span>
                 <span className="visually-hidden">Rating</span>
               </div>
               <span className="property__rating-value rating__value">{rating}</span>
             </div>
             <ul className="property__features">
               <li className="property__feature property__feature--entire">
-          Entire place
+                {type}
               </li>
               <li className="property__feature property__feature--bedrooms">
                 {numOfBedrooms === 1 ? `${numOfBedrooms} Bedroom` : `${numOfBedrooms} Bedrooms`}

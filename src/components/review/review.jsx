@@ -1,5 +1,6 @@
 import React from 'react';
 import {PropTypes as pt} from 'prop-types';
+import moment from 'moment';
 
 export const Review = (props) => {
   const {
@@ -29,7 +30,7 @@ export const Review = (props) => {
       <p className="reviews__text">
         {comment}
       </p>
-      <time className="reviews__time" dateTime={date}>{date}</time>
+      <time className="reviews__time" dateTime={moment(date).format(`YYYY-MM-DD`)}>{moment(date).format(`MMMM YYYY`)}</time>
     </div>
   </li>;
 

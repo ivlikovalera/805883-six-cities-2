@@ -5,6 +5,13 @@ export const FilterType = {
   RATED: `Top rated first`
 };
 
+export const typeOfAnotherType = new Map([
+  [`hotel`, `Hotel`],
+  [`room`, `Private Room`],
+  [`apartment`, `Apartment`],
+  [`house`, `House`],
+]);
+
 export const getUniqueCities = (offers) => {
   const namesOfUniqueCities = [];
   offers.forEach((offer) => {

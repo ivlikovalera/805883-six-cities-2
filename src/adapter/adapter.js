@@ -1,3 +1,5 @@
+import {typeOfAnotherType} from './../utils.js';
+
 export const adapterOffers = (offer) => {
   return {
     id: offer.id,
@@ -14,8 +16,8 @@ export const adapterOffers = (offer) => {
     isFavorite: offer.is_favorite,
     price: offer.price,
     title: offer.title,
-    type: offer.type,
-    rating: offer.rating,
+    type: typeOfAnotherType.get(offer.type),
+    rating: Math.round(offer.rating),
     images: offer.images,
     location: {
       latitude: offer.location.latitude,
