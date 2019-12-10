@@ -17,7 +17,7 @@ export const adapterOffers = (offer) => {
     price: offer.price,
     title: offer.title,
     type: typeOfAnotherType.get(offer.type),
-    rating: Math.round(offer.rating),
+    rating: offer.rating,
     images: offer.images,
     location: {
       latitude: offer.location.latitude,

@@ -5,20 +5,31 @@ import {Header} from './../header/header.jsx';
 import {ListOfReviews} from './../list-of-reviews/list-of-reviews.jsx';
 import Map from './../map/map.jsx';
 import {ListOfCards} from './../list-of-cards/list-of-cards.jsx';
+import {WhichPage} from './../../utils.js';
+import {Redirect} from 'react-router-dom';
 
 export const PageOfPlace = (props) => {
   const {
     onFavoriteClick,
     login,
     reviews,
-    listOffer,
+    offers,
     getReviews,
     changeActive,
     sendReview,
+    isAuthorizationRequired,
+    loadFavorites,
+    isFetching,
+    changeFetching,
   } = props;
 
-  const offer = listOffer[listOffer.findIndex((it) =>
-    it.id === parseInt(props.match.params.id, 10))];
+  if (isAuthorizationRequired) {
+    return <Redirect to="/login" />;
+  }
+
+  const offer = offers.find((it) => {
+    return it.id === parseInt(props.match.params.id, 10);
+  });
   const {id,
     title,
     isPremium,
@@ -35,13 +46,14 @@ export const PageOfPlace = (props) => {
     description,
   } = offer;
 
-  const distanceForCurrentOffer = listOffer.map((it) => {
+  const distanceForCurrentOffer = offers.map((it) => {
     return {
       id: it.id,
       distance: getDistance(location.latitude, location.longitude, it.location.latitude, it.location.longitude),
     };
   });
-  const sortingOffer = listOffer.sort((a, b) => {
+
+  const sortingOffer = offers.slice().sort((a, b) => {
     const aDistance = distanceForCurrentOffer.find((it) => it.id === a.id).distance;
     const bDistance = distanceForCurrentOffer.find((it) => it.id === b.id).distance;
     if (aDistance > bDistance) {
@@ -57,6 +69,8 @@ export const PageOfPlace = (props) => {
     <Header
       login={login}
       changeActive={changeActive}
+      isAuthorizationRequired={isAuthorizationRequired}
+      loadFavorites={loadFavorites}
     />
     <main className="page__main page__main--property">
       <section className="property" id={id}>
@@ -90,7 +104,7 @@ export const PageOfPlace = (props) => {
             </div>
             <div className="property__rating rating">
               <div className="property__stars rating__stars">
-                <span style={{width: `${rating / 5 * 100}%`}}></span>
+                <span style={{width: `${Math.round(rating) / 5 * 100}%`}}></span>
                 <span className="visually-hidden">Rating</span>
               </div>
               <span className="property__rating-value rating__value">{rating}</span>
@@ -135,6 +149,8 @@ export const PageOfPlace = (props) => {
               id={id}
               reviews={reviews}
               sendReview={sendReview}
+              isFetching={isFetching}
+              changeFetching={changeFetching}
             />
           </div>
         </div>
@@ -154,6 +170,8 @@ export const PageOfPlace = (props) => {
             getReviews={getReviews}
             isCities={false}
             changeActive={changeActive}
+            whichBlock={`near-places`}
+            currentPage={WhichPage.PAGEOFPLACE}
           />
         </section>
       </div>
@@ -167,8 +185,12 @@ PageOfPlace.propTypes = {
   getReviews: pt.func,
   login: pt.string,
   reviews: pt.array,
-  listOffer: pt.array,
+  offers: pt.array,
   activeOfferId: pt.number,
   changeActive: pt.func,
   sendReview: pt.func,
+  loadFavorites: pt.func,
+  isAuthorizationRequired: pt.bool,
+  isFetching: pt.bool,
+  changeFetching: pt.func,
 };

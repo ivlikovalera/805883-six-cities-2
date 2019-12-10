@@ -2,20 +2,29 @@ import React from "react";
 import {PropTypes as pt} from 'prop-types';
 
 export const City = (props) => {
-  const {name, onCityClick, activeCity} = props;
-  return <li className="locations__item">
-    <a className={(activeCity.name === name) ? `locations__item-link tabs__item tabs__item--active`
-      : `locations__item-link tabs__item`} href="#" onClick={(evt) => {
-      evt.preventDefault();
+  const {name, onCityClick, activeCity, isFavorite} = props;
+  return <a className={`locations__item-link ${isFavorite ? null : checkActiveCity(activeCity.name, name)}`
+  } href="#" onClick={(evt) => {
+    evt.preventDefault();
+    if (!isFavorite) {
       onCityClick(name);
-    }}>
-      <span>{name}</span>
-    </a>
-  </li>;
+    }
+  }
+  }>
+    <span>{name}</span>
+  </a>;
+};
+
+const checkActiveCity = (activeName, name) => {
+  if (activeName === name) {
+    return `tabs__item tabs__item--active`;
+  }
+  return `tabs__item`;
 };
 
 City.propTypes = {
   name: pt.string,
   onCityClick: pt.func,
   activeCity: pt.object,
+  isFavorite: pt.bool,
 };

@@ -23,7 +23,7 @@ export const Review = (props) => {
     <div className="reviews__info">
       <div className="reviews__rating rating">
         <div className="reviews__stars rating__stars">
-          <span style={{width: `94%`}}></span>
+          <span style={{width: `${rating / 5 * 100}%`}}></span>
           <span className="visually-hidden">{rating}</span>
         </div>
       </div>
@@ -33,7 +33,6 @@ export const Review = (props) => {
       <time className="reviews__time" dateTime={moment(date).format(`YYYY-MM-DD`)}>{moment(date).format(`MMMM YYYY`)}</time>
     </div>
   </li>;
-
 };
 
 Review.propTypes = {

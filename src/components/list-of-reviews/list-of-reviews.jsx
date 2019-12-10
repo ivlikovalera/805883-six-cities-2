@@ -1,10 +1,10 @@
 import React from 'react';
 import {PropTypes as pt} from 'prop-types';
 import {Review} from './../review/review.jsx';
-import {GetCommentForm} from './../get-comment-form/get-comment-form.jsx';
+import {CommentForm} from './../comment-form/comment-form.jsx';
 
 export const ListOfReviews = (props) => {
-  const {id, reviews, sendReview} = props;
+  const {id, reviews, sendReview, isFetching, changeFetching} = props;
   return <section className="property__reviews reviews">
     <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span></h2>
     <ul className="reviews__list">
@@ -19,9 +19,11 @@ export const ListOfReviews = (props) => {
         date={review.date}
       />)}
     </ul>
-    <GetCommentForm
+    <CommentForm
       id={id}
       sendReview={sendReview}
+      isFetching={isFetching}
+      changeFetching={changeFetching}
     />
   </section>;
 };
@@ -30,4 +32,6 @@ ListOfReviews.propTypes = {
   id: pt.number,
   reviews: pt.array,
   sendReview: pt.func,
+  isFetching: pt.bool,
+  changeFetching: pt.func,
 };

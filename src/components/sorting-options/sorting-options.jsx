@@ -9,7 +9,7 @@ export default class SortingOptions extends React.PureComponent {
 
     this.state = {
       isOpen: false,
-      selectedFilter: FilterType.POPULAR,
+      selectedFilter: this.props.selectedFilter,
     };
   }
 
@@ -64,4 +64,5 @@ export default class SortingOptions extends React.PureComponent {
 
 SortingOptions.propTypes = {
   sortOffers: pt.func,
+  selectedFilter: pt.string,
 };

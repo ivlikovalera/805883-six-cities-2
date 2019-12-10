@@ -1,18 +1,21 @@
 import React from "react";
 import {PropTypes as pt} from 'prop-types';
 
-export class GetCommentForm extends React.PureComponent {
+export class CommentForm extends React.PureComponent {
   constructor(props) {
     super(props);
+    this.isFetching = this.props.isFetching;
     this.state = {
       comment: ``,
       rating: 0,
     };
   }
-
+  _checkForm() {
+    return this.state.comment.length < 50 || this.state.rating === 0 || this.isFetching;
+  }
   render() {
     const {comment} = this.state;
-    const {id, sendReview} = this.props;
+    const {id, sendReview, changeFetching} = this.props;
     return <form className="reviews__form form" action="#" method="post">
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating">
@@ -71,20 +74,22 @@ export class GetCommentForm extends React.PureComponent {
           </svg>
         </label>
       </div>
-      <textarea className="reviews__textarea form__textarea" id="review" name="review" placeholder="Tell how was your stay, what you like and what can be improved"
+      <textarea className="reviews__textarea form__textarea" id="review" name="review" placeholder="Tell how was your stay, what you like and what can be improved" maxLength="300"
         value={comment} onChange={(evt) => {
           this.setState({comment: evt.target.value});
-        }}></textarea>
+        }} disabled={this._isFetching}></textarea>
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
 To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
         </p>
-        <button className="reviews__submit form__submit button" type="submit" disabled="" onClick={(evt) => {
+        <button className="reviews__submit form__submit button" type="submit" disabled={this._checkForm()} onClick={(evt) => {
           evt.preventDefault();
+          changeFetching(true);
           sendReview({
             rating: this.state.rating,
             comment: this.state.comment
           }, id);
+          this.setState({comment: ``});
         }
         }>Submit</button>
       </div>
@@ -93,7 +98,9 @@ To submit review please make sure to set <span className="reviews__star">rating<
   }
 }
 
-GetCommentForm.propTypes = {
+CommentForm.propTypes = {
   id: pt.number,
   sendReview: pt.func,
+  changeFetching: pt.func,
+  isFetching: pt.bool,
 };

@@ -21,6 +21,9 @@ export const MainPage = (props) => {
     sortOffers,
     changeActive,
     activeOfferId,
+    isAuthorizationRequired,
+    loadFavorites,
+    selectedFilter,
   } = props;
   return <>
     <div style={{display: `none`}}>
@@ -31,6 +34,8 @@ export const MainPage = (props) => {
       <Header
         login={login}
         changeActive={changeActive}
+        isAuthorizationRequired={isAuthorizationRequired}
+        loadFavorites={loadFavorites}
       />
       <main className={places.length !== 0 ? `page__main page__main--index` : `page__main page__main--index page__main--index-empty`}>
         <h1 className="visually-hidden">Cities</h1>
@@ -49,6 +54,7 @@ export const MainPage = (props) => {
                 <b className="places__found">{places.length} places to stay in {activeCity.name}</b>
                 <SortingOptions
                   sortOffers={sortOffers}
+                  selectedFilter={selectedFilter}
                 />
                 <ListOfCards
                   places={places}
@@ -56,6 +62,7 @@ export const MainPage = (props) => {
                   getReviews={getReviews}
                   isCities={isCities}
                   changeActive={changeActive}
+                  whichBlock={`cities`}
                 />
               </section>}
             <div className="cities__right-section">
@@ -88,6 +95,9 @@ MainPage.propTypes = {
   sortOffers: pt.func,
   changeActive: pt.func,
   activeOfferId: pt.number,
+  isAuthorizationRequired: pt.bool,
+  loadFavorites: pt.func,
+  selectedFilter: pt.string,
   city: pt.shape({
     location: pt.shape({
       latitude: pt.number,

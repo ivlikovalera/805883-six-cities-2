@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom';
 import {PropTypes as pt} from 'prop-types';
 
 export const Header = (props) => {
-  const {login, changeActive} = props;
+  const {login, changeActive, isAuthorizationRequired, loadFavorites} = props;
   return <header className="header">
     <div className="container">
       <div className="header__wrapper">
@@ -17,7 +17,11 @@ export const Header = (props) => {
         <nav className="header__nav">
           <ul className="header__nav-list">
             <li className="header__nav-item user">
-              <Link to="/login" className="header__nav-link header__nav-link--profile">
+              <Link to={isAuthorizationRequired ? `/login` : `/favorites`} className="header__nav-link header__nav-link--profile" onClick={() => {
+                if (!isAuthorizationRequired) {
+                  loadFavorites();
+                }
+              }}>
                 <div className="header__avatar-wrapper user__avatar-wrapper">
                 </div>
                 <span className="header__user-name user__name">{login}</span>
@@ -33,4 +37,6 @@ export const Header = (props) => {
 Header.propTypes = {
   login: pt.string,
   changeActive: pt.func,
+  isAuthorizationRequired: pt.bool,
+  loadFavorites: pt.func,
 };

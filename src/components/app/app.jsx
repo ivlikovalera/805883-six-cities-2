@@ -1,13 +1,25 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Switch, Route, Redirect} from 'react-router-dom';
-import {ActionCreator, Operation} from '../../reducer/reducer.js';
-import {getCurrentReviews} from '../../reducer/selector.js';
+import {Switch, Route} from 'react-router-dom';
+import {ActionCreator as DataActionCreator, Operation as DataOperation} from '../../reducer/data/reducer.js';
+import {Operation as UserOperation} from '../../reducer/user/reducer.js';
 import {PropTypes as pt} from 'prop-types';
 import {MainPage} from './../main-page/main-page.jsx';
 import {SignIn} from '../sign-in/sign-in.jsx';
 import {PageOfPlace} from './../page-of-place/page-of-place.jsx';
-
+import {Favorites} from './../favorites/favorites.jsx';
+import {WAITING} from './../../utils.js';
+import {getIsAuthorizationRequired, getLogin} from './../../reducer/user/selector.js';
+import {
+  getActiveCity,
+  getOffers,
+  getFetching,
+  getListOffer,
+  getUniqueCities,
+  getActiveOfferId,
+  getFavoritePlaces,
+  getSelectedFilter,
+  getCurrentReviews} from './../../reducer/data/selector.js';
 
 export const App = (props) => {
   const {
@@ -30,6 +42,9 @@ export const App = (props) => {
     changeActive,
     activeOfferId,
     sendReview,
+    favoritePlaces,
+    loadFavorites,
+    selectedFilter,
   } = props;
 
   return (
@@ -40,7 +55,7 @@ export const App = (props) => {
             changeFetching(true);
             loadOffers();
           }
-          return <div>ПОДОЖДИТЕ</div>;
+          return <div>{WAITING}</div>;
         }
         return <MainPage
           places={listOffer}
@@ -56,6 +71,9 @@ export const App = (props) => {
           sortOffers={sortOffers}
           changeActive={changeActive}
           activeOfferId={activeOfferId}
+          whichBlock={`cities`}
+          loadFavorites={loadFavorites}
+          selectedFilter={selectedFilter}
         />;
       }
       }/>
@@ -65,31 +83,54 @@ export const App = (props) => {
           login={login}
           isAuthorizationRequired={isAuthorizationRequired}
           changeActive={changeActive}
+          loadFavorites={loadFavorites}
         />}
       />
       <Route path="/offer/:id" exact render={(offerProps) => {
-        if (isAuthorizationRequired) {
-          return <Redirect to="/login" />;
-        }
         if (listOffer.length === 0) {
           if (isFetching === false) {
             changeFetching(true);
             loadOffersInOfferPage(parseInt(offerProps.match.params.id, 10));
           }
-          return <div>ПОДОЖДИТЕ</div>;
+          return <div>{WAITING}</div>;
         }
         return <PageOfPlace
           onFavoriteClick={favoriteClickHandler}
           login={login}
           reviews={reviews}
-          listOffer={listOffer}
+          offers={offers}
           getReviews={getReviews}
           changeActive={changeActive}
           sendReview={sendReview}
+          isAuthorizationRequired={isAuthorizationRequired}
+          loadFavorites={loadFavorites}
+          isFetching={isFetching}
+          changeFetching={changeFetching}
           {...offerProps}
         />;
       }
       }/>
+      <Route path="/favorites" exact render={() => {
+        if (offers.length === 0) {
+          if (isFetching === false) {
+            changeFetching(true);
+            loadFavorites();
+            loadOffers();
+          }
+          return <div>{WAITING}</div>;
+        }
+        return <Favorites
+          uniqueCities={uniqueCities}
+          favoritePlaces={favoritePlaces}
+          getReviews={getReviews}
+          favoriteClickHandler={favoriteClickHandler}
+          login={login}
+          isAuthorizationRequired={isAuthorizationRequired}
+          changeActive={changeActive}
+          loadFavorites={loadFavorites}
+        />;
+      }}
+      />
     </Switch>
   );
 };
@@ -121,51 +162,62 @@ App.propTypes = {
   activeOfferId: pt.number,
   changeActive: pt.func,
   sendReview: pt.func,
+  favoritePlaces: pt.array,
+  loadFavorites: pt.func,
+  selectedFilter: pt.string,
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
-  activeCity: state.activeCity,
-  listOffer: state.listOffer,
-  offers: state.offers,
-  uniqueCities: state.uniqueCities,
-  isAuthorizationRequired: state.isAuthorizationRequired,
-  login: state.login,
+  activeCity: getActiveCity(state),
+  listOffer: getListOffer(state),
+  offers: getOffers(state),
+  uniqueCities: getUniqueCities(state),
+  isAuthorizationRequired: getIsAuthorizationRequired(state),
+  login: getLogin(state),
   reviews: getCurrentReviews(state),
-  isFetching: state.isFetching,
-  activeOfferId: state.activeOfferId,
+  isFetching: getFetching(state),
+  activeOfferId: getActiveOfferId(state),
+  favoritePlaces: getFavoritePlaces(state),
+  selectedFilter: getSelectedFilter(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
   chooseCityHandler: (city) => {
-    dispatch(ActionCreator.changeCity(city));
-    dispatch(ActionCreator.getOffers());
+    dispatch(DataActionCreator.changeCity(city));
+    dispatch(DataActionCreator.getOffers());
   },
   favoriteClickHandler: (id) => {
-    dispatch(ActionCreator.changeFavorite(id));
+    dispatch(DataOperation.changeFavorite(id));
   },
   auth: (authData) => {
-    dispatch(Operation.authorization(authData));
+    dispatch(UserOperation.authorization(authData));
   },
   getReviews: (id) => {
-    dispatch(Operation.getReviews(id));
+    dispatch(DataOperation.getReviews(id));
   },
   loadOffersInOfferPage: (id) => {
-    dispatch(Operation.loadOffersInOfferPage(id));
+    dispatch(DataOperation.loadOffersInOfferPage(id));
   },
   changeFetching: (status) => {
-    dispatch(ActionCreator.changeFetching(status));
+    dispatch(DataActionCreator.changeFetching(status));
   },
   loadOffers: () => {
-    dispatch(Operation.loadOffers());
+    dispatch(DataOperation.loadOffers());
   },
   sortOffers: (filter) => {
-    dispatch(ActionCreator.sortOffers(filter));
+    dispatch(DataActionCreator.sortOffers(filter));
   },
   changeActive: (id = null) => {
-    dispatch(ActionCreator.changeActive(id));
+    dispatch(DataActionCreator.changeActive(id));
   },
   sendReview: (review, id) => {
-    dispatch(Operation.sendReview(review, id));
+    dispatch(DataOperation.sendReview(review, id));
+  },
+  addFavorite: (id, status) => {
+    dispatch(DataOperation.addFavorite(id, status));
+  },
+  loadFavorites: () => {
+    dispatch(DataOperation.loadFavorites());
   }
 });
 

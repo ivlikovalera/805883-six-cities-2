@@ -1,6 +1,7 @@
 import React from 'react';
 import {PropTypes as pt} from 'prop-types';
 import {CardOfPlace} from '../card-of-place/card-of-place.jsx';
+import {WhichPage} from './../../utils.js';
 
 export const ListOfCards = (props) => {
   const {
@@ -9,6 +10,7 @@ export const ListOfCards = (props) => {
     getReviews,
     isCities,
     changeActive,
+    whichBlock,
   } = props;
 
   return <div className={isCities ? `cities__places-list places__list tabs__content` : `near-places__list places__list`}>
@@ -26,6 +28,8 @@ export const ListOfCards = (props) => {
       getReviews={getReviews}
       isCities={isCities}
       changeActive={changeActive}
+      whichBlock={whichBlock}
+      currentPage={WhichPage.MAINPAGE}
     />)}
   </div>;
 };
@@ -37,6 +41,7 @@ ListOfCards.propTypes = {
   places: pt.array.isRequired,
   isCities: pt.bool,
   changeActive: pt.func,
+  whichBlock: pt.string,
   offer: pt.shape({
     previewImage: pt.string,
     title: pt.string,

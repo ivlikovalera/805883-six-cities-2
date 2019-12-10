@@ -6,12 +6,14 @@ export const ListOfCities = (props) => {
   const {uniqueCities, activeCity, chooseCityHandler} = props;
   return <section className="locations container">
     <ul className="locations__list tabs__list">
-      {uniqueCities.map((it, i) => <City
-        activeCity={activeCity}
-        key={i}
-        name={it.name}
-        onCityClick={chooseCityHandler}
-      />)}
+      {uniqueCities.map((it, i) => <li className="locations__item" key={i}>
+        <City
+          activeCity={activeCity}
+          key={i}
+          name={it.name}
+          onCityClick={chooseCityHandler}
+        />
+      </li>)}
     </ul>
   </section>;
 };

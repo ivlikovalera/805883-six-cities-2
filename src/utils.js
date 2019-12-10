@@ -5,12 +5,31 @@ export const FilterType = {
   RATED: `Top rated first`
 };
 
+export const WAITING = `Waiting ...`;
+
 export const typeOfAnotherType = new Map([
   [`hotel`, `Hotel`],
   [`room`, `Private Room`],
   [`apartment`, `Apartment`],
   [`house`, `House`],
 ]);
+
+export const PicSize = {
+  FAVORITE: {
+    width: 150,
+    height: 110,
+  },
+  OTHER: {
+    width: 260,
+    height: 200,
+  }
+};
+
+export const WhichPage = {
+  MAINPAGE: `Main Page`,
+  PAGEOFPLACE: `Page of place`,
+  FAVORITES: `Favorites`,
+};
 
 export const getUniqueCities = (offers) => {
   const namesOfUniqueCities = [];
