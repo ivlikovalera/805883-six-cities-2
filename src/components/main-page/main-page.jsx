@@ -7,7 +7,7 @@ import SortingOptions from './../sorting-options/sorting-options.jsx';
 import Header from './../header/header.jsx';
 import Map from './../map/map.jsx';
 import {connect} from 'react-redux';
-import {getActiveCity, getListOffer} from './../../reducer/data/selector.js';
+import {getActiveCity, getlistOffers} from './../../reducer/data/selector.js';
 import {WhichPage} from './../../utils.js';
 
 export const MainPage = (props) => {
@@ -74,7 +74,7 @@ MainPage.propTypes = {
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
   activeCity: getActiveCity(state),
-  places: getListOffer(state),
+  places: getlistOffers(state),
 });
 
 export default connect(mapStateToProps)(MainPage);

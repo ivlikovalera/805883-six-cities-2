@@ -6,7 +6,7 @@ import {NameSpace} from './../name-spaces.js';
 const initialState = {
   activeCity: {},
   isFetching: false,
-  listOffer: [],
+  listOffers: [],
   uniqueCities: [],
   offers: [],
   reviews: [],
@@ -91,7 +91,7 @@ export const reducer = (state = initialState, action) => {
       });
     case ActionType.GET_LIST_OF_OFFERS:
       return Object.assign({}, state, {
-        listOffer: state.offers.filter((offer) => offer.city.name === state.activeCity.name).slice(),
+        listOffers: state.offers.filter((offer) => offer.city.name === state.activeCity.name).slice(),
       });
     case ActionType.LOAD_OFFERS:
       return Object.assign({}, state, {

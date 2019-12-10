@@ -11,7 +11,7 @@ it(`App correctly renders after relaunch`, () => {
       uniqueCities={[]}
       activeCity={{}}
       chooseCityHandler={() => {}}
-      listOffer={[]}
+      listOffers={[]}
       offers={[]}
       favoriteClickHandler={() => {}}
       login={``}

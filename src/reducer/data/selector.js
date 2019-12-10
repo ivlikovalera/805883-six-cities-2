@@ -18,8 +18,8 @@ export const getFetching = (state) => {
   return state[NameSpace.DATA].isFetching;
 };
 
-export const getListOffer = (state) => {
-  return state[NameSpace.DATA].listOffer;
+export const getlistOffers = (state) => {
+  return state[NameSpace.DATA].listOffers;
 };
 
 export const getUniqueCities = (state) => {

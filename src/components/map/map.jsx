@@ -2,7 +2,7 @@ import React from 'react';
 import L from 'leaflet';
 import {PropTypes as pt} from 'prop-types';
 import {connect} from 'react-redux';
-import {getListOffer, getActiveOfferId} from './../../reducer/data/selector.js';
+import {getlistOffers, getActiveOfferId} from './../../reducer/data/selector.js';
 
 const icon = L.icon({
   iconUrl: `/img/pin.svg`,
@@ -70,7 +70,7 @@ Map.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
-  pins: getListOffer(state),
+  pins: getlistOffers(state),
   activeOfferId: getActiveOfferId(state),
 });
 

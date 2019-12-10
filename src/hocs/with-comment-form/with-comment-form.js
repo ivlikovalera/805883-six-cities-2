@@ -10,26 +10,26 @@ const withCommentForm = (Component) => {
       };
     }
 
-    render() {
-      return <Component
-        {...this.props}
-        comment={this.state.comment}
-        rating={this.state.rating}
-        onChangeRating={this._changeRatingHandler.bind(this)}
-        onChangeComment={this._changeCommentHandler.bind(this)}
-      />;
-    }
-
-    _changeRatingHandler(value) {
+    _handleChangeRating(value) {
       this.setState({
         rating: value
       });
     }
 
-    _changeCommentHandler(value) {
+    _handleChangeComment(value) {
       this.setState({
         comment: value
       });
+    }
+
+    render() {
+      return <Component
+        {...this.props}
+        comment={this.state.comment}
+        rating={this.state.rating}
+        onChangeRating={this._handleChangeRating.bind(this)}
+        onChangeComment={this._handleChangeComment.bind(this)}
+      />;
     }
   }
   return WithCommentForm;

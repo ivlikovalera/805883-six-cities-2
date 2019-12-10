@@ -46,7 +46,7 @@ describe(`reducer`, () => {
         {
           activeCity: {},
           isFetching: false,
-          listOffer: [],
+          listOffers: [],
           uniqueCities: [],
           offers: [],
           isAuthorizationRequired: true,
@@ -89,7 +89,7 @@ describe(`reducer`, () => {
     expect(
         reducer({
           activeCity: {},
-          listOffer: [],
+          listOffers: [],
           offers: [
             {
               id: 1,
@@ -122,7 +122,7 @@ describe(`reducer`, () => {
           activeCity: {
             name: `Hamburg`,
           },
-          listOffer: [],
+          listOffers: [],
           offers: [
             {
               id: 1,
@@ -155,7 +155,7 @@ describe(`reducer`, () => {
           activeCity: {
             name: `Amsterdam`,
           },
-          listOffer: [],
+          listOffers: [],
           offers: [
             {
               id: 3,
@@ -193,7 +193,7 @@ describe(`reducer`, () => {
           activeCity: {
             name: `Amsterdam`,
           },
-          listOffer: [
+          listOffers: [
             {
               id: 3,
               city: {

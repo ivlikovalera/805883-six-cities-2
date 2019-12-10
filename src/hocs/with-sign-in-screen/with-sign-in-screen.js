@@ -11,26 +11,26 @@ const withSignInScreen = (Component) => {
       };
     }
 
-    render() {
-      return <Component
-        {...this.props}
-        email={this.state.email}
-        password={this.state.password}
-        onChangeEmail={this._changeEmailHandler.bind(this)}
-        onChangePassword={this._changePasswordHandler.bind(this)}
-      />;
-    }
-
-    _changeEmailHandler(value) {
+    _handleChangeEmail(value) {
       this.setState({
         email: value
       });
     }
 
-    _changePasswordHandler(value) {
+    _handleChangePassword(value) {
       this.setState({
         password: value
       });
+    }
+
+    render() {
+      return <Component
+        {...this.props}
+        email={this.state.email}
+        password={this.state.password}
+        onChangeEmail={this._handleChangeEmail.bind(this)}
+        onChangePassword={this._handleChangePassword.bind(this)}
+      />;
     }
   }
   return WithSignInScreen;
