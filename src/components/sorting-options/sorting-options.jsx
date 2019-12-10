@@ -1,8 +1,11 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import {FilterType} from './../../utils.js';
 import {PropTypes as pt} from 'prop-types';
+import {ActionCreator as DataActionCreator} from '../../reducer/data/reducer.js';
+import {getSelectedFilter} from './../../reducer/data/selector.js';
 
-export default class SortingOptions extends React.PureComponent {
+export class SortingOptions extends React.PureComponent {
   constructor(props) {
     super(props);
     this.sortOffers = this.props.sortOffers;
@@ -66,3 +69,16 @@ SortingOptions.propTypes = {
   sortOffers: pt.func,
   selectedFilter: pt.string,
 };
+
+const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
+  selectedFilter: getSelectedFilter(state),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  sortOffers: (filter) => {
+    dispatch(DataActionCreator.sortOffers(filter));
+    dispatch(DataActionCreator.getOffers());
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SortingOptions);

@@ -1,7 +1,6 @@
 import {adapterUserData} from './../../adapter/adapter.js';
 
 const initialState = {
-  isFetching: false,
   isAuthorizationRequired: true,
   user: {},
   login: `Sign in`,
@@ -34,10 +33,6 @@ export const reducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         login: adapterUserData(action.payload).email,
         userData: adapterUserData(action.payload),
-      });
-    case ActionType.CHANGE_FETCHING:
-      return Object.assign({}, state, {
-        isFetching: action.payload,
       });
   }
   return state;

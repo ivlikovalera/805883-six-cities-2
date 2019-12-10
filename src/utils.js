@@ -31,6 +31,22 @@ export const WhichPage = {
   FAVORITES: `Favorites`,
 };
 
+const WhichBlock = {
+  CITIES: `cities`,
+  NEARPLACES: `near-places`,
+  FAVORITES: `favorites`,
+};
+
+export const getBlock = (currentPage) => {
+  switch (currentPage) {
+    case WhichPage.FAVORITES:
+      return WhichBlock.FAVORITES;
+    case WhichPage.PAGEOFPLACE:
+      return WhichBlock.NEARPLACES;
+  }
+  return WhichBlock.CITIES;
+};
+
 export const getUniqueCities = (offers) => {
   const namesOfUniqueCities = [];
   offers.forEach((offer) => {

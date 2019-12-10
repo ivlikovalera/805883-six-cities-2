@@ -1,9 +1,12 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import {PropTypes as pt} from 'prop-types';
+import {connect} from 'react-redux';
+import {getLogin, getIsAuthorizationRequired} from './../../reducer/user/selector.js';
+import {ActionCreator as DataActionCreator, Operation as DataOperation} from '../../reducer/data/reducer.js';
 
-export const Header = (props) => {
-  const {login, changeActive, isAuthorizationRequired, loadFavorites} = props;
+const Header = (props) => {
+  const {changeActive, login, isAuthorizationRequired, loadFavorites} = props;
   return <header className="header">
     <div className="container">
       <div className="header__wrapper">
@@ -40,3 +43,19 @@ Header.propTypes = {
   isAuthorizationRequired: pt.bool,
   loadFavorites: pt.func,
 };
+
+const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
+  login: getLogin(state),
+  isAuthorizationRequired: getIsAuthorizationRequired(state),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  loadFavorites: () => {
+    dispatch(DataOperation.loadFavorites());
+  },
+  changeActive: (id = null) => {
+    dispatch(DataActionCreator.changeActive(id));
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

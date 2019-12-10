@@ -1,6 +1,8 @@
 import React from 'react';
 import L from 'leaflet';
 import {PropTypes as pt} from 'prop-types';
+import {connect} from 'react-redux';
+import {getListOffer, getActiveOfferId} from './../../reducer/data/selector.js';
 
 const icon = L.icon({
   iconUrl: `/img/pin.svg`,
@@ -12,7 +14,7 @@ const activeIcon = L.icon({
   iconSize: [30, 30]
 });
 
-export default class Map extends React.PureComponent {
+class Map extends React.PureComponent {
   _addPins(pins) {
     this.markers = [];
     pins.forEach((pin)=> {
@@ -66,3 +68,10 @@ Map.propTypes = {
     zoom: pt.number
   })
 };
+
+const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
+  pins: getListOffer(state),
+  activeOfferId: getActiveOfferId(state),
+});
+
+export default connect(mapStateToProps)(Map);

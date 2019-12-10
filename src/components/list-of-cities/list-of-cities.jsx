@@ -1,17 +1,17 @@
 import React from "react";
-import {City} from './../city/city.jsx';
+import City from './../city/city.jsx';
 import {PropTypes as pt} from 'prop-types';
+import {connect} from 'react-redux';
+import {getUniqueCities} from './../../reducer/data/selector.js';
 
-export const ListOfCities = (props) => {
-  const {uniqueCities, activeCity, chooseCityHandler} = props;
+const ListOfCities = (props) => {
+  const {uniqueCities} = props;
   return <section className="locations container">
     <ul className="locations__list tabs__list">
       {uniqueCities.map((it, i) => <li className="locations__item" key={i}>
         <City
-          activeCity={activeCity}
           key={i}
           name={it.name}
-          onCityClick={chooseCityHandler}
         />
       </li>)}
     </ul>
@@ -20,6 +20,10 @@ export const ListOfCities = (props) => {
 
 ListOfCities.propTypes = {
   uniqueCities: pt.array,
-  chooseCityHandler: pt.func,
-  activeCity: pt.object,
 };
+
+const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
+  uniqueCities: getUniqueCities(state),
+});
+
+export default connect(mapStateToProps)(ListOfCities);

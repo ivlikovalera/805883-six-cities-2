@@ -1,6 +1,8 @@
 import React from 'react';
 import {PropTypes as pt} from 'prop-types';
+import {connect} from 'react-redux';
 import moment from 'moment';
+import {getFetching} from './../../reducer/data/selector.js';
 
 export const Review = (props) => {
   const {
@@ -44,3 +46,9 @@ Review.propTypes = {
   comment: pt.string,
   date: pt.string,
 };
+
+const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
+  isFetching: getFetching(state),
+});
+
+export default connect(mapStateToProps)(Review);

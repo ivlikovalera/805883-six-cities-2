@@ -1,15 +1,15 @@
 import React from 'react';
 import {Redirect} from 'react-router-dom';
 import {PropTypes as pt} from 'prop-types';
-import {Header} from './../header/header.jsx';
+import Header from './../header/header.jsx';
+import {connect} from 'react-redux';
+import {getIsAuthorizationRequired} from './../../reducer/user/selector.js';
+import {Operation as UserOperation} from '../../reducer/user/reducer.js';
 
 export class SignIn extends React.PureComponent {
   constructor(props) {
     super(props);
     this.auth = this.props.auth;
-    this.login = this.props.login;
-    this.changeActive = this.props.changeActive;
-    this.loadFavorites = this.props.loadFavorites;
 
     this.state = {
       email: ``,
@@ -23,11 +23,7 @@ export class SignIn extends React.PureComponent {
     } else {
       return (
         <div className='page page--gray page--login'>
-          <Header
-            login={this.login}
-            changeActive={this.changeActive}
-            loadFavorites={this.loadFavorites}
-          />
+          <Header />
           <main className='page__main page__main--login'>
             <h1 className="visually-hidden">Login</h1>
             <div className="page__login-container container">
@@ -73,10 +69,17 @@ export class SignIn extends React.PureComponent {
 
 SignIn.propTypes = {
   auth: pt.func,
-  login: pt.string,
   isAuthorizationRequired: pt.bool,
-  changeActive: pt.func,
-  loadFavorites: pt.func,
 };
 
+const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
+  isAuthorizationRequired: getIsAuthorizationRequired(state),
+});
 
+const mapDispatchToProps = (dispatch) => ({
+  auth: (authData) => {
+    dispatch(UserOperation.authorization(authData));
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

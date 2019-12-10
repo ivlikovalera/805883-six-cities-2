@@ -1,29 +1,20 @@
 import React from 'react';
 import {PropTypes as pt} from 'prop-types';
 import {ListOfCards} from '../list-of-cards/list-of-cards.jsx';
-import {ListOfCities} from '../list-of-cities/list-of-cities.jsx';
+import ListOfCities from '../list-of-cities/list-of-cities.jsx';
 import {EmptyMainPage} from '../empty-main-page/empty-main-page.jsx';
 import SortingOptions from './../sorting-options/sorting-options.jsx';
-import {Header} from './../header/header.jsx';
+import Header from './../header/header.jsx';
 import Map from './../map/map.jsx';
+import {connect} from 'react-redux';
+import {getActiveCity, getListOffer} from './../../reducer/data/selector.js';
+import {WhichPage} from './../../utils.js';
 
 export const MainPage = (props) => {
   const {
     places,
-    pins,
-    uniqueCities,
     activeCity,
-    chooseCityHandler,
-    login,
-    favoriteClickHandler,
-    getReviews,
     isCities,
-    sortOffers,
-    changeActive,
-    activeOfferId,
-    isAuthorizationRequired,
-    loadFavorites,
-    selectedFilter,
   } = props;
   return <>
     <div style={{display: `none`}}>
@@ -31,19 +22,11 @@ export const MainPage = (props) => {
     </div>
 
     <div className='page page--gray page--main'>
-      <Header
-        login={login}
-        changeActive={changeActive}
-        isAuthorizationRequired={isAuthorizationRequired}
-        loadFavorites={loadFavorites}
-      />
+      <Header />
       <main className={places.length !== 0 ? `page__main page__main--index` : `page__main page__main--index page__main--index-empty`}>
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <ListOfCities
-            uniqueCities={uniqueCities}
-            activeCity={activeCity}
-            chooseCityHandler={chooseCityHandler}
           />
         </div>
         <div className="cities">
@@ -52,24 +35,16 @@ export const MainPage = (props) => {
               <section className="cities__places places">
                 <h2 className="visually-hidden">Places</h2>
                 <b className="places__found">{places.length} places to stay in {activeCity.name}</b>
-                <SortingOptions
-                  sortOffers={sortOffers}
-                  selectedFilter={selectedFilter}
-                />
+                <SortingOptions />
                 <ListOfCards
                   places={places}
-                  favoriteClickHandler={favoriteClickHandler}
-                  getReviews={getReviews}
                   isCities={isCities}
-                  changeActive={changeActive}
-                  whichBlock={`cities`}
+                  currentPage={WhichPage.MAINPAGE}
                 />
               </section>}
             <div className="cities__right-section">
               {places.length === 0 ? null : <section className="cities__map map">{
                 <Map
-                  pins={pins}
-                  activeOfferId={activeOfferId}
                   centerOfMap={activeCity.location}
                 />
               }
@@ -86,18 +61,9 @@ MainPage.propTypes = {
   places: pt.array,
   pins: pt.array,
   uniqueCities: pt.array,
-  chooseCityHandler: pt.func,
   favoriteClickHandler: pt.func,
-  getReviews: pt.func,
   activeCity: pt.object,
-  login: pt.string,
   isCities: pt.bool,
-  sortOffers: pt.func,
-  changeActive: pt.func,
-  activeOfferId: pt.number,
-  isAuthorizationRequired: pt.bool,
-  loadFavorites: pt.func,
-  selectedFilter: pt.string,
   city: pt.shape({
     location: pt.shape({
       latitude: pt.number,
@@ -105,3 +71,10 @@ MainPage.propTypes = {
     })
   })
 };
+
+const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
+  activeCity: getActiveCity(state),
+  places: getListOffer(state),
+});
+
+export default connect(mapStateToProps)(MainPage);

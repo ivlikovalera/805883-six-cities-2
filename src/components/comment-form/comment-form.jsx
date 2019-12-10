@@ -1,5 +1,7 @@
 import React from "react";
 import {PropTypes as pt} from 'prop-types';
+import {connect} from 'react-redux';
+import {ActionCreator as DataActionCreator, Operation as DataOperation} from '../../reducer/data/reducer.js';
 
 export class CommentForm extends React.PureComponent {
   constructor(props) {
@@ -104,3 +106,16 @@ CommentForm.propTypes = {
   changeFetching: pt.func,
   isFetching: pt.bool,
 };
+
+const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {});
+
+const mapDispatchToProps = (dispatch) => ({
+  changeFetching: (status) => {
+    dispatch(DataActionCreator.changeFetching(status));
+  },
+  sendReview: (review, id) => {
+    dispatch(DataOperation.sendReview(review, id));
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CommentForm);

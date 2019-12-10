@@ -1,7 +1,9 @@
 import React from "react";
+import {connect} from 'react-redux';
 import {PropTypes as pt} from 'prop-types';
 import {Link} from 'react-router-dom';
-import {PicSize, WhichPage} from './../../utils.js';
+import {ActionCreator as DataActionCreator, Operation as DataOperation} from '../../reducer/data/reducer.js';
+import {PicSize, WhichPage, getBlock} from './../../utils.js';
 
 export const CardOfPlace = (props) => {
   const {id,
@@ -16,9 +18,8 @@ export const CardOfPlace = (props) => {
     getReviews,
     currentPage,
     changeActive,
-    whichBlock,
   } = props;
-  return <article className={`${whichBlock}${currentPage === WhichPage.MAINPAGE ? `__place-card` : `__card`} place-card`} id={id} onMouseOver={() => {
+  return <article className={`${getBlock(currentPage)}${currentPage === WhichPage.MAINPAGE ? `__place-card` : `__card`} place-card`} id={id} onMouseOver={() => {
     if (currentPage === WhichPage.MAINPAGE) {
       changeActive(id);
     }
@@ -32,7 +33,7 @@ export const CardOfPlace = (props) => {
     {isPremium ? <div className="place-card__mark">
       <span>Premium</span>
     </div> : null}
-    <div className={`${whichBlock}__image-wrapper place-card__image-wrapper`}>
+    <div className={`${getBlock(currentPage)}__image-wrapper place-card__image-wrapper`}>
       <a href="#">
         <img className="place-card__image" src={previewImage} width={currentPage === WhichPage.FAVORITES
           ? PicSize.FAVORITE.width : PicSize.OTHER.width} height={currentPage === WhichPage.FAVORITES
@@ -87,6 +88,21 @@ CardOfPlace.propTypes = {
   price: pt.number.isRequired,
   isCities: pt.bool,
   changeActive: pt.func,
-  whichBlock: pt.string,
   currentPage: pt.string,
 };
+
+const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {});
+
+const mapDispatchToProps = (dispatch) => ({
+  getReviews: (id) => {
+    dispatch(DataOperation.getReviews(id));
+  },
+  onFavoriteClick: (id) => {
+    dispatch(DataOperation.changeFavorite(id));
+  },
+  changeActive: (id = null) => {
+    dispatch(DataActionCreator.changeActive(id));
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CardOfPlace);

@@ -1,28 +1,22 @@
 import React from "react";
 import {PropTypes as pt} from 'prop-types';
 import {getDistance} from './../../utils.js';
-import {Header} from './../header/header.jsx';
-import {ListOfReviews} from './../list-of-reviews/list-of-reviews.jsx';
+import Header from './../header/header.jsx';
+import ListOfReviews from './../list-of-reviews/list-of-reviews.jsx';
 import Map from './../map/map.jsx';
 import {ListOfCards} from './../list-of-cards/list-of-cards.jsx';
 import {WhichPage} from './../../utils.js';
 import {Redirect} from 'react-router-dom';
+import {connect} from 'react-redux';
+import {getIsAuthorizationRequired} from './../../reducer/user/selector.js';
+import {Operation as DataOperation} from './../../reducer/data/reducer.js';
 
 export const PageOfPlace = (props) => {
   const {
     onFavoriteClick,
-    login,
-    reviews,
     offers,
-    getReviews,
-    changeActive,
-    sendReview,
     isAuthorizationRequired,
-    loadFavorites,
-    isFetching,
-    changeFetching,
   } = props;
-
   if (isAuthorizationRequired) {
     return <Redirect to="/login" />;
   }
@@ -66,12 +60,7 @@ export const PageOfPlace = (props) => {
   .slice(0, 4);
 
   return <div className='page'>
-    <Header
-      login={login}
-      changeActive={changeActive}
-      isAuthorizationRequired={isAuthorizationRequired}
-      loadFavorites={loadFavorites}
-    />
+    <Header />
     <main className="page__main page__main--property">
       <section className="property" id={id}>
         <div className="property__gallery-container container">
@@ -147,10 +136,6 @@ export const PageOfPlace = (props) => {
             </div>
             <ListOfReviews
               id={id}
-              reviews={reviews}
-              sendReview={sendReview}
-              isFetching={isFetching}
-              changeFetching={changeFetching}
             />
           </div>
         </div>
@@ -167,10 +152,7 @@ export const PageOfPlace = (props) => {
           <h2 className="near-places__title">Other places in the neighbourhood</h2>
           <ListOfCards
             places={sortingOffer.slice(1, 4)}
-            getReviews={getReviews}
             isCities={false}
-            changeActive={changeActive}
-            whichBlock={`near-places`}
             currentPage={WhichPage.PAGEOFPLACE}
           />
         </section>
@@ -182,15 +164,18 @@ export const PageOfPlace = (props) => {
 PageOfPlace.propTypes = {
   match: pt.object,
   onFavoriteClick: pt.func,
-  getReviews: pt.func,
-  login: pt.string,
-  reviews: pt.array,
   offers: pt.array,
   activeOfferId: pt.number,
-  changeActive: pt.func,
-  sendReview: pt.func,
-  loadFavorites: pt.func,
   isAuthorizationRequired: pt.bool,
-  isFetching: pt.bool,
-  changeFetching: pt.func,
 };
+
+const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
+  isAuthorizationRequired: getIsAuthorizationRequired(state),
+});
+const mapDispatchToProps = (dispatch) => ({
+  onFavoriteClick: (id) => {
+    dispatch(DataOperation.changeFavorite(id));
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PageOfPlace);

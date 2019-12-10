@@ -1,29 +1,27 @@
 import React from "react";
 import {PropTypes as pt} from 'prop-types';
-import {CardOfPlace} from './../card-of-place/card-of-place.jsx';
-import {City} from './../city/city.jsx';
-import {Header} from './../header/header.jsx';
+import CardOfPlace from './../card-of-place/card-of-place.jsx';
+import City from './../city/city.jsx';
+import Header from './../header/header.jsx';
 import {WhichPage} from './../../utils.js';
 import {Redirect} from 'react-router-dom';
+import {connect} from 'react-redux';
+import {getUniqueCities, getFavoritePlaces} from './../../reducer/data/selector.js';
+import {getIsAuthorizationRequired} from './../../reducer/user/selector.js';
 
 export const Favorites = (props) => {
-  const {uniqueCities, favoritePlaces, getReviews, favoriteClickHandler, login, isAuthorizationRequired, changeActive, loadFavorites} = props;
+  const {uniqueCities, favoritePlaces, isAuthorizationRequired} = props;
   if (isAuthorizationRequired) {
     return <Redirect to="/login" />;
   }
   return <div className={`page ${favoritePlaces.length ? null : `page--favorites-empty`}`}>
-    <Header
-      login={login}
-      changeActive={changeActive}
-      isAuthorizationRequired={isAuthorizationRequired}
-      loadFavorites={loadFavorites}
-    />
+    <Header />
     <main className={`page__main page__main--favorites ${favoritePlaces.length ? null : `page__main--favorites-empty`}`}>
       <div className="page__favorites-container container">
         {favoritePlaces.length ? <section className="favorites">
           <h1 className="favorites__title">Saved listing</h1>
           <ul className="favorites__list">
-            {getCityArray(uniqueCities, favoritePlaces, favoriteClickHandler, getReviews)}
+            {getCityArray(uniqueCities, favoritePlaces)}
           </ul>
         </section> : <section className="favorites favorites--empty"> <h1 className="visually-hidden">Favorites (empty)</h1>
           <div className="favorites__status-wrapper">
@@ -41,7 +39,7 @@ export const Favorites = (props) => {
   </div>;
 };
 
-const getCityArray = (uniqueCities, favoritePlaces, favoriteClickHandler, getReviews) => {
+const getCityArray = (uniqueCities, favoritePlaces) => {
   return uniqueCities.map((city) => {
     if (favoritePlaces.find((favoritePlace) =>
       favoritePlace.city.name === city.name)) {
@@ -52,7 +50,6 @@ const getCityArray = (uniqueCities, favoritePlaces, favoriteClickHandler, getRev
               key={city.name}
               name={city.name}
               onCityClick={() => {}}
-              whichBlock={`favorites`}
               isFavorite={true}
             />
           </div>
@@ -61,7 +58,6 @@ const getCityArray = (uniqueCities, favoritePlaces, favoriteClickHandler, getRev
           {favoritePlaces.map((favoritePlace) => {
             if (favoritePlace.city.name === city.name) {
               return <CardOfPlace
-                whichBlock={`favorites`}
                 key={favoritePlace.id}
                 id={favoritePlace.id}
                 previewImage={favoritePlace.previewImage}
@@ -71,8 +67,6 @@ const getCityArray = (uniqueCities, favoritePlaces, favoriteClickHandler, getRev
                 rating={favoritePlace.rating}
                 type={favoritePlace.type}
                 price={favoritePlace.price}
-                onFavoriteClick={favoriteClickHandler}
-                getReviews={getReviews}
                 isCities={false}
                 changeActive={() => {}}
                 currentPage={WhichPage.FAVORITES}
@@ -90,10 +84,15 @@ const getCityArray = (uniqueCities, favoritePlaces, favoriteClickHandler, getRev
 Favorites.propTypes = {
   uniqueCities: pt.array,
   favoritePlaces: pt.array,
-  getReviews: pt.func,
-  favoriteClickHandler: pt.func,
-  login: pt.string,
   isAuthorizationRequired: pt.bool,
   changeActive: pt.func,
-  loadFavorites: pt.func,
 };
+
+const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
+  uniqueCities: getUniqueCities(state),
+  isAuthorizationRequired: getIsAuthorizationRequired(state),
+  favoritePlaces: getFavoritePlaces(state),
+});
+
+export default connect(mapStateToProps)(Favorites);
+

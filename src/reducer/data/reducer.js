@@ -116,10 +116,8 @@ export const reducer = (state = initialState, action) => {
         isFetching: action.payload,
       });
     case ActionType.SORT_OFFERS: {
-      const filterOffers = state.listOffer;
-      filterOffers.sort(selectFilter(action.payload));
       return Object.assign({}, state, {
-        listOffer: filterOffers.slice(),
+        offers: state.offers.sort(selectFilter(action.payload)).slice(),
         selectedFilter: action.payload,
       });
     }

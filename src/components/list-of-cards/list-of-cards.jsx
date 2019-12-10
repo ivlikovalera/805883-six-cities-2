@@ -1,16 +1,12 @@
 import React from 'react';
 import {PropTypes as pt} from 'prop-types';
-import {CardOfPlace} from '../card-of-place/card-of-place.jsx';
-import {WhichPage} from './../../utils.js';
+import CardOfPlace from '../card-of-place/card-of-place.jsx';
 
 export const ListOfCards = (props) => {
   const {
     places,
-    favoriteClickHandler,
-    getReviews,
     isCities,
-    changeActive,
-    whichBlock,
+    currentPage,
   } = props;
 
   return <div className={isCities ? `cities__places-list places__list tabs__content` : `near-places__list places__list`}>
@@ -24,12 +20,8 @@ export const ListOfCards = (props) => {
       rating={it.rating}
       type={it.type}
       price={it.price}
-      onFavoriteClick={favoriteClickHandler}
-      getReviews={getReviews}
       isCities={isCities}
-      changeActive={changeActive}
-      whichBlock={whichBlock}
-      currentPage={WhichPage.MAINPAGE}
+      currentPage={currentPage}
     />)}
   </div>;
 };
@@ -37,11 +29,9 @@ export const ListOfCards = (props) => {
 ListOfCards.propTypes = {
   cardPointHandler: pt.func,
   favoriteClickHandler: pt.func,
-  getReviews: pt.func,
   places: pt.array.isRequired,
   isCities: pt.bool,
-  changeActive: pt.func,
-  whichBlock: pt.string,
+  currentPage: pt.string,
   offer: pt.shape({
     previewImage: pt.string,
     title: pt.string,
