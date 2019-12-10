@@ -1,11 +1,22 @@
+export const WAITING = `Waiting ...`;
+
+export const MIN_COMMENT_LENGTH = 50;
+
+export const RatingInt = {
+  FIVE: 5,
+  FOUR: 4,
+  THREE: 3,
+  TWO: 2,
+  ONE: 1,
+  NONE: 0,
+};
+
 export const FilterType = {
   POPULAR: `Popular`,
   PRICE: `Price: low to high`,
   PRICEDESC: `Price: high to low`,
   RATED: `Top rated first`
 };
-
-export const WAITING = `Waiting ...`;
 
 export const typeOfAnotherType = new Map([
   [`hotel`, `Hotel`],

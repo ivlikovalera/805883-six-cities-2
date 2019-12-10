@@ -4,6 +4,9 @@ import {connect} from 'react-redux';
 import {Review} from './../review/review.jsx';
 import CommentForm from './../comment-form/comment-form.jsx';
 import {getCurrentReviews} from './../../reducer/data/selector.js';
+import withCommentForm from './../../hocs/with-comment-form/with-comment-form.js';
+
+const CommentFormWrapped = withCommentForm(CommentForm);
 
 export const ListOfReviews = (props) => {
   const {id, reviews} = props;
@@ -21,7 +24,7 @@ export const ListOfReviews = (props) => {
         date={review.date}
       />)}
     </ul>
-    <CommentForm
+    <CommentFormWrapped
       id={id}
     />
   </section>;

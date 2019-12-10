@@ -9,6 +9,7 @@ import PageOfPlace from './../page-of-place/page-of-place.jsx';
 import Favorites from './../favorites/favorites.jsx';
 import {WAITING} from './../../utils.js';
 import {getOffers, getFetching} from './../../reducer/data/selector.js';
+import withSignInScreen from './../../hocs/with-sign-in-screen/with-sign-in-screen.js';
 
 export const App = (props) => {
   const {
@@ -19,6 +20,8 @@ export const App = (props) => {
     loadOffers,
     loadFavorites,
   } = props;
+
+  const SignInWrapped = withSignInScreen(SignIn);
 
   return (
     <Switch>
@@ -35,7 +38,7 @@ export const App = (props) => {
         />;
       }
       }/>
-      <Route path="/login" exact component={SignIn}
+      <Route path="/login" exact component={SignInWrapped}
       />
       <Route path="/offer/:id" exact render={(offerProps) => {
         if (offers.length === 0) {

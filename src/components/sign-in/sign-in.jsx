@@ -6,70 +6,74 @@ import {connect} from 'react-redux';
 import {getIsAuthorizationRequired} from './../../reducer/user/selector.js';
 import {Operation as UserOperation} from '../../reducer/user/reducer.js';
 
-export class SignIn extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.auth = this.props.auth;
+export const SignIn = (props) => {
+  const {
+    auth,
+    email,
+    password,
+    isAuthorizationRequired,
+    onChangeEmail,
+    onChangePassword
+  } = props;
 
-    this.state = {
-      email: ``,
-      password: ``,
-    };
-  }
-
-  render() {
-    if (!this.props.isAuthorizationRequired) {
-      return <Redirect to="/" />;
-    } else {
-      return (
-        <div className='page page--gray page--login'>
-          <Header />
-          <main className='page__main page__main--login'>
-            <h1 className="visually-hidden">Login</h1>
-            <div className="page__login-container container">
-              <section className="login">
-                <h1 className="login__title">Sign in</h1>
-                <form className="login__form form" action="#" method="post">
-                  <div className="login__input-wrapper form__input-wrapper">
-                    <label className="visually-hidden">E-mail</label>
-                    <input className="login__input form__input" type="email" name="email" placeholder="Email" required="" value={this.state.email} onChange={(evt) => {
-                      evt.preventDefault();
-                      this.setState({email: evt.target.value});
-                    }
-                    }/>
-                  </div>
-                  <div className="login__input-wrapper form__input-wrapper">
-                    <label className="visually-hidden">Password</label>
-                    <input className="login__input form__input" type="password" name="password" placeholder="Password" required="" value={this.state.password} onChange={(evt) => {
-                      evt.preventDefault();
-                      this.setState({password: evt.target.value});
-                    }
-                    }/>
-                  </div>
-                  <button className="login__submit form__submit button" type="submit" onClick={(evt) => {
+  if (!isAuthorizationRequired) {
+    return <Redirect to="/" />;
+  } else {
+    return (
+      <div className='page page--gray page--login'>
+        <Header />
+        <main className='page__main page__main--login'>
+          <h1 className="visually-hidden">Login</h1>
+          <div className="page__login-container container">
+            <section className="login">
+              <h1 className="login__title">Sign in</h1>
+              <form className="login__form form" action="#" method="post">
+                <div className="login__input-wrapper form__input-wrapper">
+                  <label className="visually-hidden">E-mail</label>
+                  <input className="login__input form__input" type="email" name="email" placeholder="Email" required="" value={email} onChange={(evt) => {
                     evt.preventDefault();
-                    this.auth(this.state);
-                  }}>Sign in</button>
-                </form>
-              </section>
-              <section className="locations locations--login locations--current">
-                <div className="locations__item">
-                  <a className="locations__item-link" href="#">
-                    <span>Amsterdam</span>
-                  </a>
+                    onChangeEmail(evt.target.value);
+                  }
+                  }/>
                 </div>
-              </section>
-            </div>
-          </main>
-        </div>
-      );
-    }
+                <div className="login__input-wrapper form__input-wrapper">
+                  <label className="visually-hidden">Password</label>
+                  <input className="login__input form__input" type="password" name="password" placeholder="Password" required="" value={password} onChange={(evt) => {
+                    evt.preventDefault();
+                    onChangePassword(evt.target.value);
+                  }
+                  }/>
+                </div>
+                <button className="login__submit form__submit button" type="submit" onClick={(evt) => {
+                  evt.preventDefault();
+                  auth({
+                    email,
+                    password
+                  });
+                }}>Sign in</button>
+              </form>
+            </section>
+            <section className="locations locations--login locations--current">
+              <div className="locations__item">
+                <a className="locations__item-link" href="#">
+                  <span>Amsterdam</span>
+                </a>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+    );
   }
-}
+};
 
 SignIn.propTypes = {
-  auth: pt.func,
+  email: pt.string,
+  password: pt.string,
   isAuthorizationRequired: pt.bool,
+  auth: pt.func,
+  onChangeEmail: pt.func,
+  onChangePassword: pt.func
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
