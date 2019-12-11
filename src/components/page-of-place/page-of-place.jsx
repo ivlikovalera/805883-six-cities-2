@@ -162,11 +162,33 @@ export const PageOfPlace = (props) => {
 };
 
 PageOfPlace.propTypes = {
-  match: pt.object,
-  onFavoriteClick: pt.func,
-  offers: pt.array,
-  activeOfferId: pt.number,
-  isAuthorizationRequired: pt.bool,
+  match: pt.shape({
+    params: pt.shape({
+      id: pt.string.isRequired,
+    })
+  }),
+  onFavoriteClick: pt.func.isRequired,
+  offers: pt.arrayOf(pt.shape({
+    id: pt.number,
+    title: pt.string,
+    isPremium: pt.bool,
+    isFavorite: pt.bool,
+    host: pt.object,
+    type: pt.string,
+    rating: pt.number,
+    price: pt.number,
+    maxAdults: pt.number,
+    numOfBedrooms: pt.number,
+    images: pt.arrayOf(pt.string),
+    goods: pt.arrayOf(pt.string),
+    location: pt.shape({
+      latitude: pt.number,
+      longitude: pt.number,
+      zoom: pt.number,
+    }),
+    description: pt.string,
+  })),
+  isAuthorizationRequired: pt.bool.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {

@@ -2,6 +2,8 @@ export const WAITING = `Waiting ...`;
 
 export const MIN_COMMENT_LENGTH = 50;
 
+export const SIGN_IN = `Sign in`;
+
 export const RatingInt = {
   FIVE: 5,
   FOUR: 4,

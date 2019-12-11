@@ -37,7 +37,7 @@ export const ActionCreator = {
     type: ActionType.GET_LIST_OF_OFFERS,
   }),
 
-  loadOffers: (offers, uniqueCities) => ({
+  onLoadOffers: (offers, uniqueCities) => ({
     type: ActionType.LOAD_OFFERS,
     payload: {
       offers,
@@ -50,25 +50,22 @@ export const ActionCreator = {
     payload: offer,
   }),
 
-  getReviews: (id, reviews) => ({
+  onGetReviews: (reviews) => ({
     type: ActionType.GET_REVIEWS,
-    payload: {
-      id,
-      reviews,
-    }
+    payload: reviews
   }),
 
-  changeFetching: (status) => ({
+  onChangeFetching: (status) => ({
     type: ActionType.CHANGE_FETCHING,
     payload: status,
   }),
 
-  sortOffers: (filter) => ({
+  onSortOffers: (filter) => ({
     type: ActionType.SORT_OFFERS,
     payload: filter,
   }),
 
-  changeActive: (id) => ({
+  onChangeActive: (id) => ({
     type: ActionType.CHANGE_ACTIVE,
     payload: id,
   }),
@@ -106,7 +103,7 @@ export const reducer = (state = initialState, action) => {
       });
 
     case ActionType.GET_REVIEWS:
-      const reviews = action.payload.reviews.map((it) => adapterReviewData(it))
+      const reviews = action.payload
         .sort((a, b) => moment(b.date).format(`x`) - moment(a.date).format(`x`));
       return Object.assign({}, state, {
         reviews: reviews.slice(0, 10),
@@ -136,49 +133,49 @@ export const reducer = (state = initialState, action) => {
 };
 
 export const Operation = {
-  loadOffers: () => (dispatch, _getState, api) => {
+  onLoadOffers: () => (dispatch, _getState, api) => {
     return api.get(`/hotels`)
       .then((response) => {
         const allOffers = response.data.map((offer) => adapterOffers(offer));
         const uniqueCities = getUniqueCities(allOffers);
-        dispatch(ActionCreator.loadOffers(allOffers, uniqueCities));
+        dispatch(ActionCreator.onLoadOffers(allOffers, uniqueCities));
         dispatch(ActionCreator.changeCity(uniqueCities[Math.
           floor(Math.random() * (uniqueCities.length - 1))].name));
         dispatch(ActionCreator.getOffers());
-        dispatch(ActionCreator.changeFetching(false));
+        dispatch(ActionCreator.onChangeFetching(false));
       });
   },
-  loadOffersInOfferPage: (id) => (dispatch, _getState, api) => {
+  onLoadOffersInOfferPage: (id) => (dispatch, _getState, api) => {
     return api.get(`/hotels`)
       .then((response) => {
         const allOffers = response.data.map((offer) => adapterOffers(offer));
         const uniqueCities = getUniqueCities(allOffers);
-        dispatch(ActionCreator.loadOffers(allOffers, uniqueCities));
+        dispatch(ActionCreator.onLoadOffers(allOffers, uniqueCities));
         dispatch(ActionCreator.changeCity(allOffers[allOffers.findIndex(
             (it) => it.id === id)].city.name));
         dispatch(ActionCreator.getOffers());
-        dispatch(Operation.getReviews(id));
-        dispatch(ActionCreator.changeActive(id));
+        dispatch(Operation.onGetReviews(id));
+        dispatch(ActionCreator.onChangeActive(id));
       });
   },
-  getReviews: (id) => (dispatch, _getState, api) => {
+  onGetReviews: (id) => (dispatch, _getState, api) => {
     return api.get(`/comments/${id}`)
       .then((response) => {
         if (response.status === 200) {
-          dispatch(ActionCreator.getReviews(id, response.data));
+          dispatch(ActionCreator.onGetReviews(response.data.map((it) => adapterReviewData(it))));
         }
-        dispatch(ActionCreator.changeFetching(false));
+        dispatch(ActionCreator.onChangeFetching(false));
       });
   },
-  sendReview: (review, id) => (dispatch, _getState, api) => {
+  onSendReview: (review, id) => (dispatch, _getState, api) => {
     return api.post(`/comments/${id}`, review)
       .then((response) => {
         if (response.status === 200) {
-          dispatch(Operation.getReviews(id));
+          dispatch(Operation.onGetReviews(id));
         }
       });
   },
-  loadFavorites: () => (dispatch, _getState, api) => {
+  onLoadFavorites: () => (dispatch, _getState, api) => {
     return api.get(`/favorite`)
       .then((response) => {
         if (response.status === 200) {
@@ -195,7 +192,7 @@ export const Operation = {
         if (response.status === 200) {
           dispatch(ActionCreator.changeFavorite(adapterOffers(response.data)));
           dispatch(ActionCreator.getOffers());
-          dispatch(Operation.loadFavorites());
+          dispatch(Operation.onLoadFavorites());
         }
       });
   },

@@ -14,11 +14,11 @@ import withSignInScreen from './../../hocs/with-sign-in-screen/with-sign-in-scre
 export const App = (props) => {
   const {
     offers,
-    loadOffersInOfferPage,
+    onLoadOffersInOfferPage,
     isFetching,
-    changeFetching,
-    loadOffers,
-    loadFavorites,
+    onChangeFetching,
+    onLoadOffers,
+    onLoadFavorites,
   } = props;
 
   const SignInWrapped = withSignInScreen(SignIn);
@@ -28,8 +28,8 @@ export const App = (props) => {
       <Route path="/" exact render={() => {
         if (offers.length === 0) {
           if (isFetching === false) {
-            changeFetching(true);
-            loadOffers();
+            onChangeFetching(true);
+            onLoadOffers();
           }
           return <div>{WAITING}</div>;
         }
@@ -43,14 +43,14 @@ export const App = (props) => {
       <Route path="/offer/:id" exact render={(offerProps) => {
         if (offers.length === 0) {
           if (isFetching === false) {
-            changeFetching(true);
-            loadOffersInOfferPage(parseInt(offerProps.match.params.id, 10));
+            onChangeFetching(true);
+            onLoadOffersInOfferPage(parseInt(offerProps.match.params.id, 10));
           }
           return <div>{WAITING}</div>;
         }
         return <PageOfPlace
           offers={offers}
-          loadFavorites={loadFavorites}
+          onLoadFavorites={onLoadFavorites}
           {...offerProps}
         />;
       }
@@ -58,9 +58,9 @@ export const App = (props) => {
       <Route path="/favorites" exact render={() => {
         if (offers.length === 0) {
           if (isFetching === false) {
-            changeFetching(true);
-            loadFavorites();
-            loadOffers();
+            onChangeFetching(true);
+            onLoadFavorites();
+            onLoadOffers();
           }
           return <div>{WAITING}</div>;
         }
@@ -72,13 +72,12 @@ export const App = (props) => {
 };
 
 App.propTypes = {
-  offers: pt.array,
-  isFetching: pt.bool,
-  loadOffersInOfferPage: pt.func,
-  changeFetching: pt.func,
-  loadOffers: pt.func,
-  changeActive: pt.func,
-  loadFavorites: pt.func,
+  offers: pt.arrayOf(pt.object.isRequired),
+  isFetching: pt.bool.isRequired,
+  onLoadOffersInOfferPage: pt.func.isRequired,
+  onChangeFetching: pt.func.isRequired,
+  onLoadOffers: pt.func.isRequired,
+  onLoadFavorites: pt.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
@@ -87,20 +86,20 @@ const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  loadOffersInOfferPage: (id) => {
-    dispatch(DataOperation.loadOffersInOfferPage(id));
+  onLoadOffersInOfferPage: (id) => {
+    dispatch(DataOperation.onLoadOffersInOfferPage(id));
   },
-  changeFetching: (status) => {
-    dispatch(DataActionCreator.changeFetching(status));
+  onChangeFetching: (status) => {
+    dispatch(DataActionCreator.onChangeFetching(status));
   },
-  loadOffers: () => {
-    dispatch(DataOperation.loadOffers());
+  onLoadOffers: () => {
+    dispatch(DataOperation.onLoadOffers());
   },
-  changeActive: (id = null) => {
-    dispatch(DataActionCreator.changeActive(id));
+  onChangeActive: (id = null) => {
+    dispatch(DataActionCreator.onChangeActive(id));
   },
-  loadFavorites: () => {
-    dispatch(DataOperation.loadFavorites());
+  onLoadFavorites: () => {
+    dispatch(DataOperation.onLoadFavorites());
   }
 });
 

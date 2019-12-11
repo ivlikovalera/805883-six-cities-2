@@ -3,24 +3,21 @@ import renderer from 'react-test-renderer';
 import {MainPage} from './main-page.jsx';
 import {BrowserRouter} from 'react-router-dom';
 
+jest.mock(`../list-of-cities/list-of-cities.jsx`);
+jest.mock(`../sorting-options/sorting-options.jsx`);
+jest.mock(`../header/header.jsx`);
 jest.mock(`../map/map.jsx`);
 
 it(`Main page correctly renders after relaunch`, () => {
-  const mainComponent = renderer
+  const mainPageComponent = renderer
   .create(<BrowserRouter>
     <MainPage
       places={[]}
-      pins={[]}
-      uniqueCities={[]}
+      isCities={true || false}
       activeCity={{}}
-      chooseCityHandler={() => {}}
-      isAuthorizationRequired={true || false}
-      auth={() => {}}
-      login={``}
-      favoriteClickHandler={() => {}}
     />
   </BrowserRouter>)
   .toJSON();
 
-  expect(mainComponent).toMatchSnapshot();
+  expect(mainPageComponent).toMatchSnapshot();
 });

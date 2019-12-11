@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Review correctly renders after relaunch 1`] = `
+<li
+  className="reviews__item"
+  id={0}
+>
+  <div
+    className="reviews__user user"
+  >
+    <div
+      className="reviews__avatar-wrapper user__avatar-wrapper"
+    >
+      <img
+        alt="Reviews avatar"
+        className="reviews__avatar user__avatar"
+        height="54"
+        src=""
+        width="54"
+      />
+    </div>
+    <span
+      className="reviews__user-name"
+    >
+      
+    </span>
+  </div>
+  <div
+    className="reviews__info"
+  >
+    <div
+      className="reviews__rating rating"
+    >
+      <div
+        className="reviews__stars rating__stars"
+      >
+        <span
+          style={
+            Object {
+              "width": "0%",
+            }
+          }
+        />
+        <span
+          className="visually-hidden"
+        >
+          0
+        </span>
+      </div>
+    </div>
+    <p
+      className="reviews__text"
+    >
+      
+    </p>
+    <time
+      className="reviews__time"
+      dateTime="Invalid date"
+    >
+      Invalid date
+    </time>
+  </div>
+</li>
+`;

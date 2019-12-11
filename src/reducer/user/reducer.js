@@ -1,14 +1,16 @@
 import {adapterUserData} from './../../adapter/adapter.js';
+import {SIGN_IN} from './../../utils.js';
 
 const initialState = {
   isAuthorizationRequired: true,
   user: {},
-  login: `Sign in`,
+  login: SIGN_IN,
 };
 
 export const ActionType = {
   AUTHORIZATION_REQUIRED: `AUTHORIZATION_REQUIRED`,
   AUTHORIZATION: `AUTHORIZATION`,
+  UNAUTHORAZED: `UNAUTHORIZED`
 };
 
 export const ActionCreator = {
@@ -21,6 +23,10 @@ export const ActionCreator = {
     type: ActionType.AUTHORIZATION,
     payload: user,
   }),
+
+  unauthorazed: () => ({
+    type: ActionType.UNAUTHORAZED,
+  })
 };
 
 export const reducer = (state = initialState, action) => {
@@ -32,8 +38,15 @@ export const reducer = (state = initialState, action) => {
     case ActionType.AUTHORIZATION:
       return Object.assign({}, state, {
         login: adapterUserData(action.payload).email,
-        userData: adapterUserData(action.payload),
+        user: adapterUserData(action.payload),
       });
+    case ActionType.UNAUTHORAZED:
+      if (state.isAuthorizationRequired === false) {
+        return Object.assign({}, state, {
+          login: SIGN_IN,
+          user: Object.assign({}, {}),
+        });
+      }
   }
   return state;
 };

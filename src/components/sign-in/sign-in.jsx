@@ -8,7 +8,7 @@ import {Operation as UserOperation} from '../../reducer/user/reducer.js';
 
 export const SignIn = (props) => {
   const {
-    auth,
+    onAuth,
     email,
     password,
     isAuthorizationRequired,
@@ -46,7 +46,7 @@ export const SignIn = (props) => {
                 </div>
                 <button className="login__submit form__submit button" type="submit" onClick={(evt) => {
                   evt.preventDefault();
-                  auth({
+                  onAuth({
                     email,
                     password
                   });
@@ -70,10 +70,10 @@ export const SignIn = (props) => {
 SignIn.propTypes = {
   email: pt.string,
   password: pt.string,
-  isAuthorizationRequired: pt.bool,
-  auth: pt.func,
-  onChangeEmail: pt.func,
-  onChangePassword: pt.func
+  isAuthorizationRequired: pt.bool.isRequired,
+  onAuth: pt.func.isRequired,
+  onChangeEmail: pt.func.isRequired,
+  onChangePassword: pt.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
@@ -81,7 +81,7 @@ const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  auth: (authData) => {
+  onAuth: (authData) => {
     dispatch(UserOperation.authorization(authData));
   },
 });

@@ -9,8 +9,8 @@ export const CommentForm = (props) => {
   const {
     isFetching,
     id,
-    sendReview,
-    changeFetching,
+    onSendReview,
+    onChangeFetching,
     rating,
     comment,
     onChangeRating,
@@ -85,8 +85,8 @@ To submit review please make sure to set <span className="reviews__star">rating<
       </p>
       <button className="reviews__submit form__submit button" type="submit" disabled={checkForm(comment, rating, isFetching)} onClick={(evt) => {
         evt.preventDefault();
-        changeFetching(true);
-        sendReview({
+        onChangeFetching(true);
+        onSendReview({
           rating,
           comment,
         }, id);
@@ -101,11 +101,11 @@ const checkForm = (comment, rating, isFetching) => comment.length < MIN_COMMENT_
 
 CommentForm.propTypes = {
   id: pt.number,
-  sendReview: pt.func,
-  changeFetching: pt.func,
+  onSendReview: pt.func,
+  onChangeFetching: pt.func,
   isFetching: pt.bool,
-  rating: pt.number,
-  comment: pt.string,
+  rating: pt.number.isRequired,
+  comment: pt.string.isRequired,
   onChangeRating: pt.func,
   onChangeComment: pt.func,
 };
@@ -115,11 +115,11 @@ const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  changeFetching: (status) => {
-    dispatch(DataActionCreator.changeFetching(status));
+  onChangeFetching: (status) => {
+    dispatch(DataActionCreator.onChangeFetching(status));
   },
-  sendReview: (review, id) => {
-    dispatch(DataOperation.sendReview(review, id));
+  onSendReview: (review, id) => {
+    dispatch(DataOperation.onSendReview(review, id));
   },
 });
 

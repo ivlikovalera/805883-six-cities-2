@@ -4,7 +4,7 @@ import {PropTypes as pt} from 'prop-types';
 import {connect} from 'react-redux';
 import {getUniqueCities} from './../../reducer/data/selector.js';
 
-const ListOfCities = (props) => {
+export const ListOfCities = (props) => {
   const {uniqueCities} = props;
   return <section className="locations container">
     <ul className="locations__list tabs__list">
@@ -19,7 +19,9 @@ const ListOfCities = (props) => {
 };
 
 ListOfCities.propTypes = {
-  uniqueCities: pt.array,
+  uniqueCities: pt.arrayOf(pt.shape({
+    name: pt.string.isRequired,
+  })),
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {

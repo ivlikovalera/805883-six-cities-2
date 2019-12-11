@@ -6,7 +6,8 @@ import {ActionCreator as DataActionCreator, Operation as DataOperation} from '..
 import {PicSize, WhichPage, getBlock} from './../../utils.js';
 
 export const CardOfPlace = (props) => {
-  const {id,
+  const {
+    id,
     previewImage,
     title,
     isPremium,
@@ -15,18 +16,18 @@ export const CardOfPlace = (props) => {
     type,
     price,
     onFavoriteClick,
-    getReviews,
+    onGetReviews,
     currentPage,
-    changeActive,
+    onChangeActive,
   } = props;
   return <article className={`${getBlock(currentPage)}${currentPage === WhichPage.MAINPAGE ? `__place-card` : `__card`} place-card`} id={id} onMouseOver={() => {
     if (currentPage === WhichPage.MAINPAGE) {
-      changeActive(id);
+      onChangeActive(id);
     }
   }
   } onMouseOut={() => {
     if (currentPage === WhichPage.MAINPAGE) {
-      changeActive();
+      onChangeActive();
     }
   }
   }>
@@ -65,8 +66,8 @@ export const CardOfPlace = (props) => {
       </div>
       <h2 className="place-card__name">
         <Link to={`/offer/${id}`} className="place-card_title" onClick={() => {
-          getReviews(id);
-          changeActive(id);
+          onGetReviews(id);
+          onChangeActive(id);
         }}>{title}</Link>
       </h2>
       <p className="place-card__type">{type}</p>
@@ -76,32 +77,30 @@ export const CardOfPlace = (props) => {
 
 CardOfPlace.propTypes = {
   id: pt.number.isRequired,
-  onCardPoint: pt.func,
   onFavoriteClick: pt.func,
-  getReviews: pt.func,
+  onGetReviews: pt.func,
   previewImage: pt.string.isRequired,
   title: pt.string.isRequired,
   isPremium: pt.bool,
   isFavorite: pt.bool,
-  rating: pt.number.isRequired,
-  type: pt.string.isRequired,
+  rating: pt.number,
+  type: pt.string,
   price: pt.number.isRequired,
-  isCities: pt.bool,
-  changeActive: pt.func,
-  currentPage: pt.string,
+  onChangeActive: pt.func,
+  currentPage: pt.oneOf([WhichPage.MAINPAGE, WhichPage.PAGEOFPLACE, WhichPage.FAVORITES]).isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {});
 
 const mapDispatchToProps = (dispatch) => ({
-  getReviews: (id) => {
-    dispatch(DataOperation.getReviews(id));
+  onGetReviews: (id) => {
+    dispatch(DataOperation.onGetReviews(id));
   },
   onFavoriteClick: (id) => {
     dispatch(DataOperation.changeFavorite(id));
   },
-  changeActive: (id = null) => {
-    dispatch(DataActionCreator.changeActive(id));
+  onChangeActive: (id = null) => {
+    dispatch(DataActionCreator.onChangeActive(id));
   },
 });
 

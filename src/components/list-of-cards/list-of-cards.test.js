@@ -1,16 +1,17 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 import {ListOfCards} from './list-of-cards.jsx';
+import {WhichPage} from './../../utils.js';
 
-it(`List correctly renders after relaunch`, () => {
+it(`List of cards correctly renders after relaunch`, () => {
 
-  const listComponent = renderer
+  const listOfCardsComponent = renderer
   .create(<ListOfCards
     places={[]}
-    cardPointHandler={() => {}}
-    favoriteClickHandler={() => {}}
+    isCities={true || false}
+    currentPage={WhichPage.MAINPAGE || WhichPage.PAGEOFPLACE || WhichPage.FAVORITES}
   />)
   .toJSON();
 
-  expect(listComponent).toMatchSnapshot();
+  expect(listOfCardsComponent).toMatchSnapshot();
 });

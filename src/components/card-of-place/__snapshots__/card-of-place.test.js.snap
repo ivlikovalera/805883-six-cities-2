@@ -2,7 +2,7 @@
 
 exports[`Card correctly renders after relaunch 1`] = `
 <article
-  className="near-places__card place-card"
+  className="cities__place-card place-card"
   id={0}
   onMouseOut={[Function]}
   onMouseOver={[Function]}
@@ -15,7 +15,7 @@ exports[`Card correctly renders after relaunch 1`] = `
     </span>
   </div>
   <div
-    className="near-places__image-wrapper place-card__image-wrapper"
+    className="cities__image-wrapper place-card__image-wrapper"
   >
     <a
       href="#"
@@ -23,9 +23,9 @@ exports[`Card correctly renders after relaunch 1`] = `
       <img
         alt="Place image"
         className="place-card__image"
-        height="200"
+        height={200}
         src=""
-        width="260"
+        width={260}
       />
     </a>
   </div>
@@ -80,7 +80,7 @@ exports[`Card correctly renders after relaunch 1`] = `
         <span
           style={
             Object {
-              "width": "93%",
+              "width": "0%",
             }
           }
         />

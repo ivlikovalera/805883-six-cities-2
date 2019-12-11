@@ -5,14 +5,14 @@ import {connect} from 'react-redux';
 import {getLogin, getIsAuthorizationRequired} from './../../reducer/user/selector.js';
 import {ActionCreator as DataActionCreator, Operation as DataOperation} from '../../reducer/data/reducer.js';
 
-const Header = (props) => {
-  const {changeActive, login, isAuthorizationRequired, loadFavorites} = props;
+export const Header = (props) => {
+  const {onChangeActive, login, isAuthorizationRequired, onLoadFavorites} = props;
   return <header className="header">
     <div className="container">
       <div className="header__wrapper">
         <div className="header__left">
           <Link to="/" className="header__logo-link header__logo-link--active" onClick={() => {
-            changeActive();
+            onChangeActive();
           }}>
             <img className="header__logo" src="/img/logo.svg" alt="6 cities logo" width="81" height="41"/>
           </Link>
@@ -22,7 +22,7 @@ const Header = (props) => {
             <li className="header__nav-item user">
               <Link to={isAuthorizationRequired ? `/login` : `/favorites`} className="header__nav-link header__nav-link--profile" onClick={() => {
                 if (!isAuthorizationRequired) {
-                  loadFavorites();
+                  onLoadFavorites();
                 }
               }}>
                 <div className="header__avatar-wrapper user__avatar-wrapper">
@@ -38,10 +38,10 @@ const Header = (props) => {
 };
 
 Header.propTypes = {
-  login: pt.string,
-  changeActive: pt.func,
-  isAuthorizationRequired: pt.bool,
-  loadFavorites: pt.func,
+  login: pt.string.isRequired,
+  onChangeActive: pt.func,
+  isAuthorizationRequired: pt.bool.isRequired,
+  onLoadFavorites: pt.func,
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
@@ -50,11 +50,11 @@ const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  loadFavorites: () => {
-    dispatch(DataOperation.loadFavorites());
+  onLoadFavorites: () => {
+    dispatch(DataOperation.onLoadFavorites());
   },
-  changeActive: (id = null) => {
-    dispatch(DataActionCreator.changeActive(id));
+  onChangeActive: (id = null) => {
+    dispatch(DataActionCreator.onChangeActive(id));
   },
 });
 

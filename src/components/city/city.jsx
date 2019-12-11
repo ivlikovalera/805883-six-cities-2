@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {getActiveCity} from './../../reducer/data/selector.js';
 import {ActionCreator as DataActionCreator} from '../../reducer/data/reducer.js';
 
-const City = (props) => {
+export const City = (props) => {
   const {name, onCityClick, activeCity, isFavorite} = props;
   return <a className={`locations__item-link ${isFavorite ? null : checkActiveCity(activeCity.name, name)}`
   } href="#" onClick={(evt) => {
@@ -26,9 +26,11 @@ const checkActiveCity = (activeName, name) => {
 };
 
 City.propTypes = {
-  name: pt.string,
+  name: pt.string.isRequired,
   onCityClick: pt.func,
-  activeCity: pt.object,
+  activeCity: pt.shape({
+    name: pt.string,
+  }),
   isFavorite: pt.bool,
 };
 

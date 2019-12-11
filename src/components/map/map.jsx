@@ -15,19 +15,8 @@ const activeIcon = L.icon({
 });
 
 class Map extends React.PureComponent {
-  _addPins(pins) {
-    this.markers = [];
-    pins.forEach((pin)=> {
-      const latitude = pin.location.latitude;
-      const longitude = pin.location.longitude;
-      const coordinates = [latitude, longitude];
-      this.markers.push(L.marker(coordinates, {icon: this.activeOfferId === pin.id ? activeIcon : icon}).addTo(this.map));
-    });
-  }
-
   componentDidMount() {
-    const {pins, centerOfMap} = this.props;
-    this.activeOfferId = this.props.activeOfferId;
+    const {centerOfMap, pins, activeOfferId} = this.props;
     this.map = L.map(`map`, {
       center: centerOfMap ? [centerOfMap.latitude, centerOfMap.longitude] : [0, 0],
       zoom: centerOfMap ? centerOfMap.zoom : 0,
@@ -40,18 +29,27 @@ class Map extends React.PureComponent {
       ]
     });
 
-    this._addPins(pins);
+    this._addPins(pins, activeOfferId);
   }
 
   componentDidUpdate() {
-    const {centerOfMap, pins} = this.props;
-    this.activeOfferId = this.props.activeOfferId;
+    const {centerOfMap, pins, activeOfferId} = this.props;
     this.map.setView([centerOfMap.latitude, centerOfMap.longitude], centerOfMap.zoom);
     this.markers.forEach((marker) => {
       this.map.removeLayer(marker);
     });
 
-    this._addPins(pins);
+    this._addPins(pins, activeOfferId);
+  }
+
+  _addPins(pins, activeOfferId) {
+    this.markers = [];
+    pins.forEach((pin)=> {
+      const latitude = pin.location.latitude;
+      const longitude = pin.location.longitude;
+      const coordinates = [latitude, longitude];
+      this.markers.push(L.marker(coordinates, {icon: activeOfferId === pin.id ? activeIcon : icon}).addTo(this.map));
+    });
   }
 
   render() {
@@ -61,7 +59,13 @@ class Map extends React.PureComponent {
 
 Map.propTypes = {
   activeOfferId: pt.number,
-  pins: pt.array,
+  pins: pt.arrayOf(pt.shape({
+    id: pt.number,
+    location: pt.shape({
+      latitude: pt.number,
+      longitude: pt.number,
+    })
+  })),
   centerOfMap: pt.shape({
     latitude: pt.number,
     longitude: pt.number,

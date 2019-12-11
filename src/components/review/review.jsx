@@ -38,13 +38,12 @@ export const Review = (props) => {
 };
 
 Review.propTypes = {
-  id: pt.number,
-  name: pt.string,
-  avatarUrl: pt.string,
-  isPro: pt.bool,
-  rating: pt.number,
-  comment: pt.string,
-  date: pt.string,
+  id: pt.number.isRequired,
+  name: pt.string.isRequired,
+  avatarUrl: pt.string.isRequired,
+  rating: pt.number.isRequired,
+  comment: pt.string.isRequired,
+  date: pt.string.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {

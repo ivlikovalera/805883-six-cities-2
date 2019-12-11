@@ -68,7 +68,7 @@ const getCityArray = (uniqueCities, favoritePlaces) => {
                 type={favoritePlace.type}
                 price={favoritePlace.price}
                 isCities={false}
-                changeActive={() => {}}
+                onChangeActive={() => {}}
                 currentPage={WhichPage.FAVORITES}
               />;
             }
@@ -82,10 +82,20 @@ const getCityArray = (uniqueCities, favoritePlaces) => {
 };
 
 Favorites.propTypes = {
-  uniqueCities: pt.array,
-  favoritePlaces: pt.array,
-  isAuthorizationRequired: pt.bool,
-  changeActive: pt.func,
+  uniqueCities: pt.arrayOf(pt.shape({
+    name: pt.string,
+  })),
+  favoritePlaces: pt.arrayOf(pt.shape({
+    id: pt.number,
+    title: pt.string,
+    previewImage: pt.string,
+    isPremium: pt.bool,
+    isFavorite: pt.bool,
+    rating: pt.number,
+    type: pt.string,
+    price: pt.number,
+  })),
+  isAuthorizationRequired: pt.bool.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {

@@ -31,8 +31,15 @@ export const ListOfReviews = (props) => {
 };
 
 ListOfReviews.propTypes = {
-  id: pt.number,
-  reviews: pt.array,
+  id: pt.number.isRequired,
+  reviews: pt.arrayOf(pt.shape({
+    id: pt.number,
+    name: pt.string,
+    avatarUrl: pt.string,
+    isPro: pt.bool,
+    comment: pt.string,
+    date: pt.string,
+  })),
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {

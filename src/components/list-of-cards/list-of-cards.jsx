@@ -1,6 +1,7 @@
 import React from 'react';
 import {PropTypes as pt} from 'prop-types';
 import CardOfPlace from '../card-of-place/card-of-place.jsx';
+import {WhichPage} from './../../utils.js';
 
 export const ListOfCards = (props) => {
   const {
@@ -27,18 +28,16 @@ export const ListOfCards = (props) => {
 };
 
 ListOfCards.propTypes = {
-  cardPointHandler: pt.func,
-  favoriteClickHandler: pt.func,
-  places: pt.array.isRequired,
-  isCities: pt.bool,
-  currentPage: pt.string,
-  offer: pt.shape({
-    previewImage: pt.string,
-    title: pt.string,
+  places: pt.arrayOf(pt.shape({
+    id: pt.number.isRequired,
+    title: pt.string.isRequired,
+    previewImage: pt.string.isRequired,
     isPremium: pt.bool,
     isFavorite: pt.bool,
     rating: pt.number,
     type: pt.string,
-    price: pt.number,
-  })
+    price: pt.number.isRequired,
+  })),
+  isCities: pt.bool,
+  currentPage: pt.oneOf([WhichPage.MAINPAGE, WhichPage.PAGEOFPLACE, WhichPage.FAVORITES]).isRequired,
 };
