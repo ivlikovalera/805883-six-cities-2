@@ -9,6 +9,7 @@ it(`City correctly renders after relaunch`, () => {
     name={``}
     onCityClick={() => {}}
     activeCity={{}}
+    isFavorite={true || false}
   />)
   .toJSON();
 

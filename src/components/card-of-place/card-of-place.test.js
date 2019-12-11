@@ -2,6 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import {CardOfPlace} from './card-of-place.jsx';
 import {BrowserRouter} from 'react-router-dom';
+import {WhichPage} from './../../utils.js';
 
 it(`Card correctly renders after relaunch`, () => {
 
@@ -9,6 +10,8 @@ it(`Card correctly renders after relaunch`, () => {
   .create(<BrowserRouter>
     <CardOfPlace
       id={0}
+      onFavoriteClick={() => {}}
+      onGetReviews={() => {}}
       previewImage={``}
       title={``}
       isPremium={true || false}
@@ -16,8 +19,8 @@ it(`Card correctly renders after relaunch`, () => {
       rating={0}
       type={``}
       price={0}
-      onCardPoint={() => {}}
-      onFavoriteClick={() => {}}
+      onChangeActive={() => {}}
+      currentPage={WhichPage.MAINPAGE || WhichPage.PAGEOFPLACE || WhichPage.FAVORITES}
     />
   </BrowserRouter>)
   .toJSON();

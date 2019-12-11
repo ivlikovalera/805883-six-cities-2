@@ -1,14 +1,13 @@
 import React from 'react';
 import {PropTypes as pt} from 'prop-types';
-import {CardOfPlace} from '../card-of-place/card-of-place.jsx';
+import CardOfPlace from '../card-of-place/card-of-place.jsx';
+import {WhichPage} from './../../utils.js';
 
 export const ListOfCards = (props) => {
   const {
     places,
-    favoriteClickHandler,
-    getReviews,
     isCities,
-    changeActive,
+    currentPage,
   } = props;
 
   return <div className={isCities ? `cities__places-list places__list tabs__content` : `near-places__list places__list`}>
@@ -22,28 +21,23 @@ export const ListOfCards = (props) => {
       rating={it.rating}
       type={it.type}
       price={it.price}
-      onFavoriteClick={favoriteClickHandler}
-      getReviews={getReviews}
       isCities={isCities}
-      changeActive={changeActive}
+      currentPage={currentPage}
     />)}
   </div>;
 };
 
 ListOfCards.propTypes = {
-  cardPointHandler: pt.func,
-  favoriteClickHandler: pt.func,
-  getReviews: pt.func,
-  places: pt.array.isRequired,
-  isCities: pt.bool,
-  changeActive: pt.func,
-  offer: pt.shape({
-    previewImage: pt.string,
-    title: pt.string,
+  places: pt.arrayOf(pt.shape({
+    id: pt.number.isRequired,
+    title: pt.string.isRequired,
+    previewImage: pt.string.isRequired,
     isPremium: pt.bool,
     isFavorite: pt.bool,
     rating: pt.number,
     type: pt.string,
-    price: pt.number,
-  })
+    price: pt.number.isRequired,
+  })),
+  isCities: pt.bool,
+  currentPage: pt.oneOf([WhichPage.MAINPAGE, WhichPage.PAGEOFPLACE, WhichPage.FAVORITES]).isRequired,
 };

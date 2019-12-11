@@ -8,16 +8,12 @@ it(`App correctly renders after relaunch`, () => {
   const appComponent = renderer
   .create(<BrowserRouter>
     <App
-      uniqueCities={[]}
-      activeCity={{}}
-      chooseCityHandler={() => {}}
-      listOffer={[]}
       offers={[]}
-      favoriteClickHandler={() => {}}
-      login={``}
-      auth={() => {}}
-      isAuthorizationRequired={true || false}
       isFetching={true || false}
+      onLoadOffersInOfferPage={() => {}}
+      onChangeFetching={() => {}}
+      onLoadOffers={() => {}}
+      onLoadFavorites={() => {}}
     />
   </BrowserRouter>)
   .toJSON();

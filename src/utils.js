@@ -1,3 +1,18 @@
+export const WAITING = `Waiting ...`;
+
+export const MIN_COMMENT_LENGTH = 50;
+
+export const SIGN_IN = `Sign in`;
+
+export const RatingInt = {
+  FIVE: 5,
+  FOUR: 4,
+  THREE: 3,
+  TWO: 2,
+  ONE: 1,
+  NONE: 0,
+};
+
 export const FilterType = {
   POPULAR: `Popular`,
   PRICE: `Price: low to high`,
@@ -11,6 +26,39 @@ export const typeOfAnotherType = new Map([
   [`apartment`, `Apartment`],
   [`house`, `House`],
 ]);
+
+export const PicSize = {
+  FAVORITE: {
+    width: 150,
+    height: 110,
+  },
+  OTHER: {
+    width: 260,
+    height: 200,
+  }
+};
+
+export const WhichPage = {
+  MAINPAGE: `Main Page`,
+  PAGEOFPLACE: `Page of place`,
+  FAVORITES: `Favorites`,
+};
+
+const WhichBlock = {
+  CITIES: `cities`,
+  NEARPLACES: `near-places`,
+  FAVORITES: `favorites`,
+};
+
+export const getBlock = (currentPage) => {
+  switch (currentPage) {
+    case WhichPage.FAVORITES:
+      return WhichBlock.FAVORITES;
+    case WhichPage.PAGEOFPLACE:
+      return WhichBlock.NEARPLACES;
+  }
+  return WhichBlock.CITIES;
+};
 
 export const getUniqueCities = (offers) => {
   const namesOfUniqueCities = [];

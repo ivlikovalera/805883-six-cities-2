@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import thunk from 'redux-thunk';
-import {reducer} from './reducer/reducer.js';
+import reducer from './reducer/reducer.js';
+import {Operation as UserOperation} from './reducer/user/reducer.js';
 import {createStore, applyMiddleware} from 'redux';
 import {createAPI} from './api.js';
 import {Provider} from 'react-redux';
@@ -18,6 +19,8 @@ const init = () => {
           window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : (f) => f
       )
   );
+
+  store.dispatch(UserOperation.checkAuthorization());
 
   ReactDOM.render(<Provider store={store}>
     <BrowserRouter>

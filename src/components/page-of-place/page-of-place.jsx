@@ -1,24 +1,29 @@
 import React from "react";
 import {PropTypes as pt} from 'prop-types';
 import {getDistance} from './../../utils.js';
-import {Header} from './../header/header.jsx';
-import {ListOfReviews} from './../list-of-reviews/list-of-reviews.jsx';
+import Header from './../header/header.jsx';
+import ListOfReviews from './../list-of-reviews/list-of-reviews.jsx';
 import Map from './../map/map.jsx';
 import {ListOfCards} from './../list-of-cards/list-of-cards.jsx';
+import {WhichPage} from './../../utils.js';
+import {Redirect} from 'react-router-dom';
+import {connect} from 'react-redux';
+import {getIsAuthorizationRequired} from './../../reducer/user/selector.js';
+import {Operation as DataOperation} from './../../reducer/data/reducer.js';
 
 export const PageOfPlace = (props) => {
   const {
     onFavoriteClick,
-    login,
-    reviews,
-    listOffer,
-    getReviews,
-    changeActive,
-    sendReview,
+    offers,
+    isAuthorizationRequired,
   } = props;
+  if (isAuthorizationRequired) {
+    return <Redirect to="/login" />;
+  }
 
-  const offer = listOffer[listOffer.findIndex((it) =>
-    it.id === parseInt(props.match.params.id, 10))];
+  const offer = offers.find((it) => {
+    return it.id === parseInt(props.match.params.id, 10);
+  });
   const {id,
     title,
     isPremium,
@@ -35,13 +40,14 @@ export const PageOfPlace = (props) => {
     description,
   } = offer;
 
-  const distanceForCurrentOffer = listOffer.map((it) => {
+  const distanceForCurrentOffer = offers.map((it) => {
     return {
       id: it.id,
       distance: getDistance(location.latitude, location.longitude, it.location.latitude, it.location.longitude),
     };
   });
-  const sortingOffer = listOffer.sort((a, b) => {
+
+  const sortingOffer = offers.slice().sort((a, b) => {
     const aDistance = distanceForCurrentOffer.find((it) => it.id === a.id).distance;
     const bDistance = distanceForCurrentOffer.find((it) => it.id === b.id).distance;
     if (aDistance > bDistance) {
@@ -54,10 +60,7 @@ export const PageOfPlace = (props) => {
   .slice(0, 4);
 
   return <div className='page'>
-    <Header
-      login={login}
-      changeActive={changeActive}
-    />
+    <Header />
     <main className="page__main page__main--property">
       <section className="property" id={id}>
         <div className="property__gallery-container container">
@@ -90,7 +93,7 @@ export const PageOfPlace = (props) => {
             </div>
             <div className="property__rating rating">
               <div className="property__stars rating__stars">
-                <span style={{width: `${rating / 5 * 100}%`}}></span>
+                <span style={{width: `${Math.round(rating) / 5 * 100}%`}}></span>
                 <span className="visually-hidden">Rating</span>
               </div>
               <span className="property__rating-value rating__value">{rating}</span>
@@ -133,8 +136,6 @@ export const PageOfPlace = (props) => {
             </div>
             <ListOfReviews
               id={id}
-              reviews={reviews}
-              sendReview={sendReview}
             />
           </div>
         </div>
@@ -151,9 +152,8 @@ export const PageOfPlace = (props) => {
           <h2 className="near-places__title">Other places in the neighbourhood</h2>
           <ListOfCards
             places={sortingOffer.slice(1, 4)}
-            getReviews={getReviews}
             isCities={false}
-            changeActive={changeActive}
+            currentPage={WhichPage.PAGEOFPLACE}
           />
         </section>
       </div>
@@ -162,13 +162,42 @@ export const PageOfPlace = (props) => {
 };
 
 PageOfPlace.propTypes = {
-  match: pt.object,
-  onFavoriteClick: pt.func,
-  getReviews: pt.func,
-  login: pt.string,
-  reviews: pt.array,
-  listOffer: pt.array,
-  activeOfferId: pt.number,
-  changeActive: pt.func,
-  sendReview: pt.func,
+  match: pt.shape({
+    params: pt.shape({
+      id: pt.string.isRequired,
+    })
+  }),
+  onFavoriteClick: pt.func.isRequired,
+  offers: pt.arrayOf(pt.shape({
+    id: pt.number,
+    title: pt.string,
+    isPremium: pt.bool,
+    isFavorite: pt.bool,
+    host: pt.object,
+    type: pt.string,
+    rating: pt.number,
+    price: pt.number,
+    maxAdults: pt.number,
+    numOfBedrooms: pt.number,
+    images: pt.arrayOf(pt.string),
+    goods: pt.arrayOf(pt.string),
+    location: pt.shape({
+      latitude: pt.number,
+      longitude: pt.number,
+      zoom: pt.number,
+    }),
+    description: pt.string,
+  })),
+  isAuthorizationRequired: pt.bool.isRequired,
 };
+
+const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
+  isAuthorizationRequired: getIsAuthorizationRequired(state),
+});
+const mapDispatchToProps = (dispatch) => ({
+  onFavoriteClick: (id) => {
+    dispatch(DataOperation.changeFavorite(id));
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PageOfPlace);

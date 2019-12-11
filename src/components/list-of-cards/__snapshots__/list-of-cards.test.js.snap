@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`List correctly renders after relaunch 1`] = `
+exports[`List of cards correctly renders after relaunch 1`] = `
 <div
-  className="near-places__list places__list"
+  className="cities__places-list places__list tabs__content"
 />
 `;

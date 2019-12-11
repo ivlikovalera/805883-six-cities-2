@@ -1,6 +1,8 @@
 import React from 'react';
 import {PropTypes as pt} from 'prop-types';
+import {connect} from 'react-redux';
 import moment from 'moment';
+import {getFetching} from './../../reducer/data/selector.js';
 
 export const Review = (props) => {
   const {
@@ -23,7 +25,7 @@ export const Review = (props) => {
     <div className="reviews__info">
       <div className="reviews__rating rating">
         <div className="reviews__stars rating__stars">
-          <span style={{width: `94%`}}></span>
+          <span style={{width: `${rating / 5 * 100}%`}}></span>
           <span className="visually-hidden">{rating}</span>
         </div>
       </div>
@@ -33,15 +35,19 @@ export const Review = (props) => {
       <time className="reviews__time" dateTime={moment(date).format(`YYYY-MM-DD`)}>{moment(date).format(`MMMM YYYY`)}</time>
     </div>
   </li>;
-
 };
 
 Review.propTypes = {
-  id: pt.number,
-  name: pt.string,
-  avatarUrl: pt.string,
-  isPro: pt.bool,
-  rating: pt.number,
-  comment: pt.string,
-  date: pt.string,
+  id: pt.number.isRequired,
+  name: pt.string.isRequired,
+  avatarUrl: pt.string.isRequired,
+  rating: pt.number.isRequired,
+  comment: pt.string.isRequired,
+  date: pt.string.isRequired,
 };
+
+const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
+  isFetching: getFetching(state),
+});
+
+export default connect(mapStateToProps)(Review);

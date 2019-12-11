@@ -1,9 +1,13 @@
 import React from "react";
+import {connect} from 'react-redux';
 import {PropTypes as pt} from 'prop-types';
 import {Link} from 'react-router-dom';
+import {ActionCreator as DataActionCreator, Operation as DataOperation} from '../../reducer/data/reducer.js';
+import {PicSize, WhichPage, getBlock} from './../../utils.js';
 
 export const CardOfPlace = (props) => {
-  const {id,
+  const {
+    id,
     previewImage,
     title,
     isPremium,
@@ -12,27 +16,29 @@ export const CardOfPlace = (props) => {
     type,
     price,
     onFavoriteClick,
-    getReviews,
-    isCities,
-    changeActive,
+    onGetReviews,
+    currentPage,
+    onChangeActive,
   } = props;
-  return <article className={isCities ? `cities__place-card place-card` : `near-places__card place-card`} id={id} onMouseOver={() => {
-    if (isCities) {
-      changeActive(id);
+  return <article className={`${getBlock(currentPage)}${currentPage === WhichPage.MAINPAGE ? `__place-card` : `__card`} place-card`} id={id} onMouseOver={() => {
+    if (currentPage === WhichPage.MAINPAGE) {
+      onChangeActive(id);
     }
   }
   } onMouseOut={() => {
-    if (isCities) {
-      changeActive();
+    if (currentPage === WhichPage.MAINPAGE) {
+      onChangeActive();
     }
   }
   }>
     {isPremium ? <div className="place-card__mark">
       <span>Premium</span>
     </div> : null}
-    <div className={isCities ? `cities__image-wrapper place-card__image-wrapper` : `near-places__image-wrapper place-card__image-wrapper`}>
+    <div className={`${getBlock(currentPage)}__image-wrapper place-card__image-wrapper`}>
       <a href="#">
-        <img className="place-card__image" src={previewImage} width="260" height="200" alt="Place image"/>
+        <img className="place-card__image" src={previewImage} width={currentPage === WhichPage.FAVORITES
+          ? PicSize.FAVORITE.width : PicSize.OTHER.width} height={currentPage === WhichPage.FAVORITES
+          ? PicSize.FAVORITE.height : PicSize.OTHER.height} alt="Place image"/>
       </a>
     </div>
     <div className="place-card__info">
@@ -54,14 +60,14 @@ export const CardOfPlace = (props) => {
       </div>
       <div className="place-card__rating rating">
         <div className="place-card__stars rating__stars">
-          <span style={{width: `${rating / 5 * 100}%`}}></span>
+          <span style={{width: `${Math.round(Math.round(rating) / 5 * 100)}%`}}></span>
           <span className="visually-hidden">Rating{rating}</span>
         </div>
       </div>
       <h2 className="place-card__name">
         <Link to={`/offer/${id}`} className="place-card_title" onClick={() => {
-          getReviews(id);
-          changeActive(id);
+          onGetReviews(id);
+          onChangeActive(id);
         }}>{title}</Link>
       </h2>
       <p className="place-card__type">{type}</p>
@@ -71,16 +77,31 @@ export const CardOfPlace = (props) => {
 
 CardOfPlace.propTypes = {
   id: pt.number.isRequired,
-  onCardPoint: pt.func,
   onFavoriteClick: pt.func,
-  getReviews: pt.func,
+  onGetReviews: pt.func,
   previewImage: pt.string.isRequired,
   title: pt.string.isRequired,
   isPremium: pt.bool,
   isFavorite: pt.bool,
-  rating: pt.number.isRequired,
-  type: pt.string.isRequired,
+  rating: pt.number,
+  type: pt.string,
   price: pt.number.isRequired,
-  isCities: pt.bool,
-  changeActive: pt.func,
+  onChangeActive: pt.func,
+  currentPage: pt.oneOf([WhichPage.MAINPAGE, WhichPage.PAGEOFPLACE, WhichPage.FAVORITES]).isRequired,
 };
+
+const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {});
+
+const mapDispatchToProps = (dispatch) => ({
+  onGetReviews: (id) => {
+    dispatch(DataOperation.onGetReviews(id));
+  },
+  onFavoriteClick: (id) => {
+    dispatch(DataOperation.changeFavorite(id));
+  },
+  onChangeActive: (id = null) => {
+    dispatch(DataActionCreator.onChangeActive(id));
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CardOfPlace);

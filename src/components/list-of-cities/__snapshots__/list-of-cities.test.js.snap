@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`List correctly renders after relaunch 1`] = `
+exports[`List of cities correctly renders after relaunch 1`] = `
 <section
   className="locations container"
 >

@@ -1,17 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`City correctly renders after relaunch 1`] = `
-<li
-  className="locations__item"
+<a
+  className="locations__item-link null"
+  href="#"
+  onClick={[Function]}
 >
-  <a
-    className="locations__item-link tabs__item"
-    href="#"
-    onClick={[Function]}
-  >
-    <span>
-      
-    </span>
-  </a>
-</li>
+  <span>
+    
+  </span>
+</a>
 `;

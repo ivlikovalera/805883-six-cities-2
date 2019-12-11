@@ -1,10 +1,15 @@
 import React from 'react';
 import {PropTypes as pt} from 'prop-types';
+import {connect} from 'react-redux';
 import {Review} from './../review/review.jsx';
-import {GetCommentForm} from './../get-comment-form/get-comment-form.jsx';
+import CommentForm from './../comment-form/comment-form.jsx';
+import {getCurrentReviews} from './../../reducer/data/selector.js';
+import withCommentForm from './../../hocs/with-comment-form/with-comment-form.js';
+
+const CommentFormWrapped = withCommentForm(CommentForm);
 
 export const ListOfReviews = (props) => {
-  const {id, reviews, sendReview} = props;
+  const {id, reviews} = props;
   return <section className="property__reviews reviews">
     <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span></h2>
     <ul className="reviews__list">
@@ -19,15 +24,26 @@ export const ListOfReviews = (props) => {
         date={review.date}
       />)}
     </ul>
-    <GetCommentForm
+    <CommentFormWrapped
       id={id}
-      sendReview={sendReview}
     />
   </section>;
 };
 
 ListOfReviews.propTypes = {
-  id: pt.number,
-  reviews: pt.array,
-  sendReview: pt.func,
+  id: pt.number.isRequired,
+  reviews: pt.arrayOf(pt.shape({
+    id: pt.number,
+    name: pt.string,
+    avatarUrl: pt.string,
+    isPro: pt.bool,
+    comment: pt.string,
+    date: pt.string,
+  })),
 };
+
+const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
+  reviews: getCurrentReviews(state),
+});
+
+export default connect(mapStateToProps)(ListOfReviews);

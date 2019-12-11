@@ -1,171 +1,105 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Switch, Route, Redirect} from 'react-router-dom';
-import {ActionCreator, Operation} from '../../reducer/reducer.js';
-import {getCurrentReviews} from '../../reducer/selector.js';
+import {Switch, Route} from 'react-router-dom';
+import {ActionCreator as DataActionCreator, Operation as DataOperation} from '../../reducer/data/reducer.js';
 import {PropTypes as pt} from 'prop-types';
-import {MainPage} from './../main-page/main-page.jsx';
-import {SignIn} from '../sign-in/sign-in.jsx';
-import {PageOfPlace} from './../page-of-place/page-of-place.jsx';
-
+import MainPage from './../main-page/main-page.jsx';
+import SignIn from '../sign-in/sign-in.jsx';
+import PageOfPlace from './../page-of-place/page-of-place.jsx';
+import Favorites from './../favorites/favorites.jsx';
+import {WAITING} from './../../utils.js';
+import {getOffers, getFetching} from './../../reducer/data/selector.js';
+import withSignInScreen from './../../hocs/with-sign-in-screen/with-sign-in-screen.js';
 
 export const App = (props) => {
   const {
-    activeCity,
-    chooseCityHandler,
-    favoriteClickHandler,
-    listOffer,
-    uniqueCities,
-    isAuthorizationRequired,
-    auth,
-    login,
-    getReviews,
     offers,
-    reviews,
-    loadOffersInOfferPage,
+    onLoadOffersInOfferPage,
     isFetching,
-    changeFetching,
-    loadOffers,
-    sortOffers,
-    changeActive,
-    activeOfferId,
-    sendReview,
+    onChangeFetching,
+    onLoadOffers,
+    onLoadFavorites,
   } = props;
+
+  const SignInWrapped = withSignInScreen(SignIn);
 
   return (
     <Switch>
       <Route path="/" exact render={() => {
         if (offers.length === 0) {
           if (isFetching === false) {
-            changeFetching(true);
-            loadOffers();
+            onChangeFetching(true);
+            onLoadOffers();
           }
-          return <div>ПОДОЖДИТЕ</div>;
+          return <div>{WAITING}</div>;
         }
         return <MainPage
-          places={listOffer}
-          pins={listOffer}
-          uniqueCities={uniqueCities}
-          activeCity={activeCity}
-          chooseCityHandler={chooseCityHandler}
-          favoriteClickHandler={favoriteClickHandler}
-          isAuthorizationRequired={isAuthorizationRequired}
-          login={login}
-          getReviews={getReviews}
           isCities={true}
-          sortOffers={sortOffers}
-          changeActive={changeActive}
-          activeOfferId={activeOfferId}
         />;
       }
       }/>
-      <Route path="/login" exact render={() =>
-        <SignIn
-          auth={auth}
-          login={login}
-          isAuthorizationRequired={isAuthorizationRequired}
-          changeActive={changeActive}
-        />}
+      <Route path="/login" exact component={SignInWrapped}
       />
       <Route path="/offer/:id" exact render={(offerProps) => {
-        if (isAuthorizationRequired) {
-          return <Redirect to="/login" />;
-        }
-        if (listOffer.length === 0) {
+        if (offers.length === 0) {
           if (isFetching === false) {
-            changeFetching(true);
-            loadOffersInOfferPage(parseInt(offerProps.match.params.id, 10));
+            onChangeFetching(true);
+            onLoadOffersInOfferPage(parseInt(offerProps.match.params.id, 10));
           }
-          return <div>ПОДОЖДИТЕ</div>;
+          return <div>{WAITING}</div>;
         }
         return <PageOfPlace
-          onFavoriteClick={favoriteClickHandler}
-          login={login}
-          reviews={reviews}
-          listOffer={listOffer}
-          getReviews={getReviews}
-          changeActive={changeActive}
-          sendReview={sendReview}
+          offers={offers}
+          onLoadFavorites={onLoadFavorites}
           {...offerProps}
         />;
       }
       }/>
+      <Route path="/favorites" exact render={() => {
+        if (offers.length === 0) {
+          if (isFetching === false) {
+            onChangeFetching(true);
+            onLoadFavorites();
+            onLoadOffers();
+          }
+          return <div>{WAITING}</div>;
+        }
+        return <Favorites />;
+      }}
+      />
     </Switch>
   );
 };
 
 App.propTypes = {
-  places: pt.arrayOf(pt.shape({place: pt.string})),
-  pins: pt.arrayOf(pt.shape({
-    location: pt.shape({
-      latitude: pt.number,
-      longtitude: pt.number,
-    })
-  })),
-  uniqueCities: pt.array,
-  chooseCityHandler: pt.func,
-  favoriteClickHandler: pt.func,
-  listOffer: pt.array,
-  activeCity: pt.object,
-  isAuthorizationRequired: pt.bool,
-  auth: pt.func,
-  login: pt.string,
-  getReviews: pt.func,
-  loadOffersInOfferPage: pt.func,
-  offers: pt.array,
-  reviews: pt.array,
-  isFetching: pt.bool,
-  changeFetching: pt.func,
-  loadOffers: pt.func,
-  sortOffers: pt.func,
-  activeOfferId: pt.number,
-  changeActive: pt.func,
-  sendReview: pt.func,
+  offers: pt.arrayOf(pt.object.isRequired),
+  isFetching: pt.bool.isRequired,
+  onLoadOffersInOfferPage: pt.func.isRequired,
+  onChangeFetching: pt.func.isRequired,
+  onLoadOffers: pt.func.isRequired,
+  onLoadFavorites: pt.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
-  activeCity: state.activeCity,
-  listOffer: state.listOffer,
-  offers: state.offers,
-  uniqueCities: state.uniqueCities,
-  isAuthorizationRequired: state.isAuthorizationRequired,
-  login: state.login,
-  reviews: getCurrentReviews(state),
-  isFetching: state.isFetching,
-  activeOfferId: state.activeOfferId,
+  offers: getOffers(state),
+  isFetching: getFetching(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  chooseCityHandler: (city) => {
-    dispatch(ActionCreator.changeCity(city));
-    dispatch(ActionCreator.getOffers());
+  onLoadOffersInOfferPage: (id) => {
+    dispatch(DataOperation.onLoadOffersInOfferPage(id));
   },
-  favoriteClickHandler: (id) => {
-    dispatch(ActionCreator.changeFavorite(id));
+  onChangeFetching: (status) => {
+    dispatch(DataActionCreator.onChangeFetching(status));
   },
-  auth: (authData) => {
-    dispatch(Operation.authorization(authData));
+  onLoadOffers: () => {
+    dispatch(DataOperation.onLoadOffers());
   },
-  getReviews: (id) => {
-    dispatch(Operation.getReviews(id));
+  onChangeActive: (id = null) => {
+    dispatch(DataActionCreator.onChangeActive(id));
   },
-  loadOffersInOfferPage: (id) => {
-    dispatch(Operation.loadOffersInOfferPage(id));
-  },
-  changeFetching: (status) => {
-    dispatch(ActionCreator.changeFetching(status));
-  },
-  loadOffers: () => {
-    dispatch(Operation.loadOffers());
-  },
-  sortOffers: (filter) => {
-    dispatch(ActionCreator.sortOffers(filter));
-  },
-  changeActive: (id = null) => {
-    dispatch(ActionCreator.changeActive(id));
-  },
-  sendReview: (review, id) => {
-    dispatch(Operation.sendReview(review, id));
+  onLoadFavorites: () => {
+    dispatch(DataOperation.onLoadFavorites());
   }
 });
 

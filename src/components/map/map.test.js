@@ -10,7 +10,8 @@ it(`Map correctly renders after relaunch`, () => {
   const mapComponent = renderer
   .create(<Map
     pins={[]}
-    activeCity={{}}
+    centerOfMap={{}}
+    activeOfferId={0}
   />)
   .toJSON();
 
