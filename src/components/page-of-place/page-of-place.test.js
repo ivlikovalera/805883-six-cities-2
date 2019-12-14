@@ -34,7 +34,6 @@ it(`Page of place correctly renders after relaunch`, () => {
         },
         description: ``,
       }]}
-      isAuthorizationRequired={false}
     />
   </BrowserRouter>)
   .toJSON();

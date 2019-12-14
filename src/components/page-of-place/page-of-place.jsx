@@ -6,20 +6,14 @@ import ListOfReviews from './../list-of-reviews/list-of-reviews.jsx';
 import Map from './../map/map.jsx';
 import {ListOfCards} from './../list-of-cards/list-of-cards.jsx';
 import {WhichPage} from './../../utils.js';
-import {Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
-import {getIsAuthorizationRequired} from './../../reducer/user/selector.js';
 import {Operation as DataOperation} from './../../reducer/data/reducer.js';
 
 export const PageOfPlace = (props) => {
   const {
     onFavoriteClick,
     offers,
-    isAuthorizationRequired,
   } = props;
-  if (isAuthorizationRequired) {
-    return <Redirect to="/login" />;
-  }
 
   const offer = offers.find((it) => {
     return it.id === parseInt(props.match.params.id, 10);
@@ -188,16 +182,12 @@ PageOfPlace.propTypes = {
     }),
     description: pt.string,
   })),
-  isAuthorizationRequired: pt.bool.isRequired,
 };
 
-const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
-  isAuthorizationRequired: getIsAuthorizationRequired(state),
-});
 const mapDispatchToProps = (dispatch) => ({
   onFavoriteClick: (id) => {
     dispatch(DataOperation.changeFavorite(id));
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(PageOfPlace);
+export default connect(null, mapDispatchToProps)(PageOfPlace);

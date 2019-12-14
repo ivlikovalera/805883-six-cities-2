@@ -47,6 +47,7 @@ export const MainPage = (props) => {
             <div className="cities__right-section">
               {places.length === 0 ? null : <section className="cities__map map">{
                 <Map
+                  pins={places}
                   centerOfMap={activeCity.location}
                 />
               }

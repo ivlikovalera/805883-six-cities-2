@@ -2,7 +2,7 @@ import React from 'react';
 import L from 'leaflet';
 import {PropTypes as pt} from 'prop-types';
 import {connect} from 'react-redux';
-import {getlistOffers, getActiveOfferId} from './../../reducer/data/selector.js';
+import {getActiveOfferId} from './../../reducer/data/selector.js';
 
 const icon = L.icon({
   iconUrl: `/img/pin.svg`,
@@ -28,8 +28,7 @@ class Map extends React.PureComponent {
         })
       ]
     });
-
-    this._addPins(pins, activeOfferId);
+    this._handlePinsAdd(pins, activeOfferId);
   }
 
   componentDidUpdate() {
@@ -39,10 +38,10 @@ class Map extends React.PureComponent {
       this.map.removeLayer(marker);
     });
 
-    this._addPins(pins, activeOfferId);
+    this._handlePinsAdd(pins, activeOfferId);
   }
 
-  _addPins(pins, activeOfferId) {
+  _handlePinsAdd(pins, activeOfferId) {
     this.markers = [];
     pins.forEach((pin)=> {
       const latitude = pin.location.latitude;
@@ -74,7 +73,6 @@ Map.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
-  pins: getlistOffers(state),
   activeOfferId: getActiveOfferId(state),
 });
 

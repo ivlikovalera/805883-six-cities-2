@@ -20,8 +20,8 @@ export const CommentForm = (props) => {
   return <form className="reviews__form form" action="#" method="post">
     <label className="reviews__label form__label" htmlFor="review">Your review</label>
     <div className="reviews__rating-form form__rating">
-      <input className="form__rating-input visually-hidden" name="rating" value="5" id="5-stars" type="radio"
-        onClick={() => {
+      <input className="form__rating-input visually-hidden" name="rating" value="5" id="5-stars" type="radio" checked={rating === RatingInt.FIVE ? true : false }
+        onChange={() => {
           onChangeRating(RatingInt.FIVE);
         }
         }/>
@@ -31,8 +31,8 @@ export const CommentForm = (props) => {
         </svg>
       </label>
 
-      <input className="form__rating-input visually-hidden" name="rating" value="4" id="4-stars" type="radio"
-        onClick={() => {
+      <input className="form__rating-input visually-hidden" name="rating" value="4" id="4-stars" type="radio" checked={rating === RatingInt.FOUR ? true : false }
+        onChange={() => {
           onChangeRating(RatingInt.FOUR);
         }
         }/>
@@ -42,8 +42,8 @@ export const CommentForm = (props) => {
         </svg>
       </label>
 
-      <input className="form__rating-input visually-hidden" name="rating" value="3" id="3-stars" type="radio"
-        onClick={() => {
+      <input className="form__rating-input visually-hidden" name="rating" value="3" id="3-stars" type="radio" checked={rating === RatingInt.THREE ? true : false }
+        onChange={() => {
           onChangeRating(RatingInt.THREE);
         }
         }/>
@@ -53,8 +53,8 @@ export const CommentForm = (props) => {
         </svg>
       </label>
 
-      <input className="form__rating-input visually-hidden" name="rating" value="2" id="2-stars" type="radio"
-        onClick={() => {
+      <input className="form__rating-input visually-hidden" name="rating" value="2" id="2-stars" type="radio" checked={rating === RatingInt.TWO ? true : false }
+        onChange={() => {
           onChangeRating(RatingInt.TWO);
         }
         }/>
@@ -64,8 +64,8 @@ export const CommentForm = (props) => {
         </svg>
       </label>
 
-      <input className="form__rating-input visually-hidden" name="rating" value="1" id="1-star" type="radio"
-        onClick={() => {
+      <input className="form__rating-input visually-hidden" name="rating" value="1" id="1-star" type="radio" checked={rating === RatingInt.ONE ? true : false }
+        onChange={() => {
           onChangeRating(RatingInt.ONE);
         }
         }/>
@@ -91,6 +91,7 @@ To submit review please make sure to set <span className="reviews__star">rating<
           comment,
         }, id);
         onChangeComment(``);
+        onChangeRating(0);
       }
       }>Submit</button>
     </div>

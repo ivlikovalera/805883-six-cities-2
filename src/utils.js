@@ -38,6 +38,15 @@ export const PicSize = {
   }
 };
 
+const Degrees = {
+  180: 180,
+  60: 60
+};
+
+const NAUTICAL_MILE_TO_MILE = 1.1515;
+
+const MILE_TO_KILOMETER = 1.609;
+
 export const WhichPage = {
   MAINPAGE: `Main Page`,
   PAGEOFPLACE: `Page of place`,
@@ -70,24 +79,24 @@ export const getUniqueCities = (offers) => {
   return namesOfUniqueCities.slice(0, 6);
 };
 
-export const getDistance = (lat1, lon1, lat2, lon2) => {
-  if ((lat1 === lat2) && (lon1 === lon2)) {
+export const getDistance = (latitude1, longitude1, latitude2, longitude2) => {
+  if ((latitude1 === latitude2) && (longitude1 === longitude2)) {
     return 0;
   } else {
-    const radlat1 = Math.PI * lat1 / 180;
-    const radlat2 = Math.PI * lat2 / 180;
-    const theta = lon1 - lon2;
-    const radtheta = Math.PI * theta / 180;
-    let dist = Math.sin(radlat1) * Math.sin(radlat2)
-     + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-    if (dist > 1) {
-      dist = 1;
+    const radlatitude1 = Math.PI * latitude1 / Degrees[180];
+    const radlatitude2 = Math.PI * latitude2 / Degrees[180];
+    const theta = longitude1 - longitude2;
+    const radtheta = Math.PI * theta / Degrees[180];
+    let distance = Math.sin(radlatitude1) * Math.sin(radlatitude2)
+     + Math.cos(radlatitude1) * Math.cos(radlatitude2) * Math.cos(radtheta);
+    if (distance > 1) {
+      distance = 1;
     }
-    dist = Math.acos(dist);
-    dist = dist * 180 / Math.PI;
-    dist = dist * 60 * 1.1515;
-    dist = dist * 1.609344;
-    return dist;
+    distance = Math.acos(distance);
+    distance = distance * Degrees[180] / Math.PI;
+    distance = distance * Degrees[60] * NAUTICAL_MILE_TO_MILE;
+    distance = distance * MILE_TO_KILOMETER;
+    return distance;
   }
 };
 
@@ -98,7 +107,7 @@ export const selectFilter = (type) => {
     case FilterType.PRICEDESC:
       return (a, b) => b.price - a.price;
     case FilterType.RATED:
-      return (a, b) => a.rating - b.rating;
+      return (a, b) => b.rating - a.rating;
   }
   return (a, b) => a.id - b.id;
 };

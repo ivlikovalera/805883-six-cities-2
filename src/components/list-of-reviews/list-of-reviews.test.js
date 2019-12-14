@@ -10,6 +10,7 @@ it(`List of reviews correctly renders after relaunch`, () => {
   .create(<ListOfReviews
     id={0}
     reviews={[]}
+    isAuthorizationRequired={true || false}
   />)
   .toJSON();
 

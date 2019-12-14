@@ -21,7 +21,7 @@ describe(`Check comment form`, () => {
       onChangeComment={() => {}}
     />);
     const threeStarRating = commentForm.find(`[id="3-stars"]`);
-    threeStarRating.simulate(`click`);
+    threeStarRating.simulate(`change`);
     expect(changeRatingHandler).toBeCalledWith(3);
   });
 
